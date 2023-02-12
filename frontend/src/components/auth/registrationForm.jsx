@@ -46,7 +46,7 @@ export default function RegistrationForm() {
   };
 
   return (
-    <div className="w-[30rem] shadow-[0px_0px_50px_10px_rgba(0,0,0,0.05)] flex flex-col p-8 rounded-3xl">
+    <div className="w-full flex flex-col p-8 sm:w-[30rem] sm:shadow-[0px_0px_50px_10px_rgba(0,0,0,0.05)] sm:rounded-3xl">
       <h1 className="text-center text-4xl my-8 font-bold">Register</h1>
       <form onSubmit={handleSubmit}>
         <Input
