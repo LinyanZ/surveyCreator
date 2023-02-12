@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import Joi from "joi";
 import Input from "../common/input";
 import { validate } from "../../utils";
@@ -59,7 +60,12 @@ export default function LoginForm() {
           label="Login"
         />
         <div className="w-full h-[1px] bg-neutral-200 my-8" />
-        <p className="text-xl text-center my-4 w-full">Create an account</p>
+        <Link
+          className="block text-xl text-center my-4 mx-auto w-fit"
+          to="/register"
+        >
+          Create an account
+        </Link>
       </form>
     </div>
   );

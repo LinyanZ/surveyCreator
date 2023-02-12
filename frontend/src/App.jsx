@@ -1,31 +1,22 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import RegistrationForm from "./components/auth/registrationForm";
-import LoginForm from "./components/auth/loginForm";
+import LoginPage from "./pages/loginPage";
+import RegistrationPage from "./pages/registrationPage";
+import Root from "./pages/root";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: (
-      <div className="absolute top-0 left-0 right-0 bottom-0 flex flex-col justify-center items-center">
-        Hello
-      </div>
-    ),
-  },
-  {
-    path: "/login",
-    element: (
-      <div className="absolute top-0 left-0 right-0 bottom-0 flex flex-col justify-center items-center">
-        <LoginForm />
-      </div>
-    ),
-  },
-  {
-    path: "/register",
-    element: (
-      <div className="absolute top-0 left-0 right-0 bottom-0 flex flex-col justify-center items-center">
-        <RegistrationForm />
-      </div>
-    ),
+    element: <Root />,
+    children: [
+      {
+        path: "login",
+        element: <LoginPage />,
+      },
+      {
+        path: "register",
+        element: <RegistrationPage />,
+      },
+    ],
   },
 ]);
 
