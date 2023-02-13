@@ -3,7 +3,7 @@ export default function DropDownListQuestion({ question, onChange }) {
 
   return (
     <select
-      className="px-4 py-1 text-2xl"
+      className="px-4 py-1 text-2xl w-full"
       defaultValue=""
       onChange={(e) => onChange(question, e.target.value)}
     >

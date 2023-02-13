@@ -54,7 +54,7 @@ export default function QuestionBase({
     <form className="w-full my-8">
       <h3 className="text-2xl px-4 py-2 w-full font-bold">{generateTitle()}</h3>
       {questionTypeSwitch()}
-      <p className="text-red mx-4 mt-2 text-red-500">{error}</p>
+      {error && <p className="text-red mx-4 mt-2 text-red-500">{error}</p>}
     </form>
   );
 }
