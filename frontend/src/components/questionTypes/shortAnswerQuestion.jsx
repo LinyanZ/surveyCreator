@@ -2,8 +2,9 @@ export default function ShortAnswerQuestion({
   question,
   index,
   showIndex = true,
+  onChange,
 }) {
-  const { title } = question;
+  const { title, uuid } = question;
 
   return (
     <form className="w-full my-8">
@@ -14,6 +15,9 @@ export default function ShortAnswerQuestion({
         className="text-2xl px-4 py-2 w-full focus:outline-none border-b-2 border-transparent focus:border-neutral-200"
         type="text"
         placeholder="type you answer here"
+        onChange={(e) => {
+          onChange(uuid, e.target.value);
+        }}
       />
     </form>
   );

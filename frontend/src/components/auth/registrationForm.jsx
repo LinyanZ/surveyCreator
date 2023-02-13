@@ -73,10 +73,9 @@ export default function RegistrationForm() {
           onChange={handleChange}
           error={errors.reEnterPassword}
         />
-        <SubmitButton
-          label="Register"
-          disabled={Object.keys(errors).length !== 0}
-        />
+        <SubmitButton disabled={Object.keys(errors).length !== 0}>
+          Register
+        </SubmitButton>
         <div className="w-full h-[1px] bg-neutral-200 my-8" />
         <Link
           className="block text-xl text-center my-4 mx-auto w-fit"

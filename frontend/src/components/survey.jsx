@@ -3,8 +3,16 @@ import SingleChoiceQuestion from "./questionTypes/singleChoiceQuestion";
 import MultipleChoicesQuestion from "./questionTypes/multipleChoicesQuestion";
 import DropDownListQuestion from "./questionTypes/dropDownListQuestion";
 import RatingQuestion from "./questionTypes/ratingQuestion";
+import { useState } from "react";
+import SubmitButton from "./common/submitButton";
 
 export default function Survey({ survey, showIndex }) {
+  const [submission, setSubmission] = useState({});
+
+  const handleChange = (uuid, value) => {
+    setSubmission((s) => ({ ...s, [uuid]: value }));
+  };
+
   return (
     <div className="w-full max-w-screen-lg mx-auto p-8">
       <input
@@ -23,50 +31,58 @@ export default function Survey({ survey, showIndex }) {
           case "short answer":
             return (
               <ShortAnswerQuestion
-                key={`${index} ${question.title}`}
+                key={question.uuid}
                 question={question}
                 index={index + 1}
                 showIndex={showIndex}
+                onChange={handleChange}
               />
             );
           case "single choice":
             return (
               <SingleChoiceQuestion
-                key={`${index} ${question.title}`}
+                key={question.uuid}
                 question={question}
                 index={index + 1}
                 showIndex={showIndex}
+                onChange={handleChange}
               />
             );
           case "multiple choices":
             return (
               <MultipleChoicesQuestion
-                key={`${index} ${question.title}`}
+                key={question.uuid}
                 question={question}
                 index={index + 1}
                 showIndex={showIndex}
+                onChange={handleChange}
               />
             );
           case "drop down":
             return (
               <DropDownListQuestion
-                key={`${index} ${question.title}`}
+                key={question.uuid}
                 question={question}
                 index={index + 1}
                 showIndex={showIndex}
+                onChange={handleChange}
               />
             );
           case "rating":
             return (
               <RatingQuestion
-                key={`${index} ${question.title}`}
+                key={question.uuid}
                 question={question}
                 index={index + 1}
                 showIndex={showIndex}
+                onChange={handleChange}
               />
             );
         }
       })}
+      <SubmitButton onClick={() => console.log(submission)}>
+        Submit
+      </SubmitButton>
     </div>
   );
 }

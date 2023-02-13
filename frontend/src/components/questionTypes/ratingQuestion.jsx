@@ -1,8 +1,14 @@
 import { useEffect, useState } from "react";
 
-export default function RatingQuestion({ question, index, showIndex }) {
-  const { minLabel, maxLabel, min, max, step, title } = question;
+export default function RatingQuestion({
+  question,
+  index,
+  showIndex,
+  onChange,
+}) {
+  const { minLabel, maxLabel, min, max, step, title, uuid } = question;
   const [ratings, setRatings] = useState([]);
+  const [selectedRating, setSelectedRating] = useState(null);
 
   useEffect(() => {
     const newRatings = [];
@@ -20,7 +26,18 @@ export default function RatingQuestion({ question, index, showIndex }) {
       <div className="flex gap-8 px-4 text-2xl">
         <p>{minLabel}</p>
         {ratings.map((r) => (
-          <button key={`${title} ${r}`}>{r}</button>
+          <button
+            className={`w-10 h-10 ${
+              selectedRating === r ? "bg-emerald-500 text-white" : ""
+            }`}
+            key={`${uuid} ${r}`}
+            onClick={() => {
+              onChange(uuid, r);
+              setSelectedRating(r);
+            }}
+          >
+            {r}
+          </button>
         ))}
         <p>{maxLabel}</p>
       </div>

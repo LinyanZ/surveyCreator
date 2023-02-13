@@ -55,10 +55,9 @@ export default function LoginForm() {
           error={errors.password}
         />
         <p className="text-xl text-right">Forgot password?</p>
-        <SubmitButton
-          disabled={Object.keys(errors).length !== 0}
-          label="Login"
-        />
+        <SubmitButton disabled={Object.keys(errors).length !== 0}>
+          Login
+        </SubmitButton>
         <div className="w-full h-[1px] bg-neutral-200 my-8" />
         <Link
           className="block text-xl text-center my-4 mx-auto w-fit"
