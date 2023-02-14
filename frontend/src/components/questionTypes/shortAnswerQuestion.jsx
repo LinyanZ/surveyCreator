@@ -5,7 +5,7 @@ export default function ShortAnswerQuestion({ question, handleChange }) {
       type="text"
       placeholder="type you answer here"
       onChange={(e) => {
-        handleChange(question, e.target.value);
+        handleChange && handleChange(question, e.target.value);
       }}
     />
   );

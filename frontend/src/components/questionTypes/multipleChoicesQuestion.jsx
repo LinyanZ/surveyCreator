@@ -17,14 +17,16 @@ export default function MultipleChoicesQuestion({ question, handleChange }) {
             name={uuid}
             value={`${uuid} ${option}`}
             onChange={(e) => {
-              const newCheckedOption = [...checkedOptions];
-              newCheckedOption[index] = e.target.checked;
-              setCheckedOptions(newCheckedOption);
+              if (handleChange) {
+                const newCheckedOption = [...checkedOptions];
+                newCheckedOption[index] = e.target.checked;
+                setCheckedOptions(newCheckedOption);
 
-              const answers = [];
-              for (let i = 0; i < options.length; i++)
-                if (newCheckedOption[i]) answers.push(options[i]);
-              handleChange && handleChange(question, answers);
+                const answers = [];
+                for (let i = 0; i < options.length; i++)
+                  if (newCheckedOption[i]) answers.push(options[i]);
+                handleChange(question, answers);
+              }
             }}
           />
           <label htmlFor={`${uuid} ${option}`}>{option}</label>

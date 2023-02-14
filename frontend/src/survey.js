@@ -11,19 +11,19 @@ const survey = {
       isRequired: true,
     },
     {
-      type: "single choice",
+      type: "multiple choices single answer",
       title: "This is a single choice question:",
       options: ["option 1", "option 2", "option 3"],
       uuid: uuid(),
     },
     {
-      type: "multiple choices",
+      type: "multiple choices multiple answers",
       title: "This is a multiple choices question:",
       options: ["option 1", "option 2", "option 3"],
       uuid: uuid(),
     },
     {
-      type: "drop down",
+      type: "drop-down list",
       title: "This is a drop down list question:",
       options: ["option 1", "option 2", "option 3"],
       uuid: uuid(),

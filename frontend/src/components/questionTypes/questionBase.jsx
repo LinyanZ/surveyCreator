@@ -5,37 +5,39 @@ import MultipleChoicesQuestion from "./multipleChoicesQuestion";
 import DropDownListQuestion from "./dropDownListQuestion";
 import RatingQuestion from "./ratingQuestion";
 
+import surveyTypes from "../../surveyTypes";
+
 export default function QuestionBase({
   question,
   index,
   error,
   showIndex,
-  ...props
+  handleChange,
 }) {
   const { title } = question;
 
   const questionTypeSwitch = () => {
     let component;
     switch (question.type) {
-      case "short answer":
+      case surveyTypes[0].type:
         component = <ShortAnswerQuestion />;
         break;
-      case "single choice":
+      case surveyTypes[1].type:
         component = <SingleChoiceQuestion />;
         break;
-      case "multiple choices":
+      case surveyTypes[2].type:
         component = <MultipleChoicesQuestion />;
         break;
-      case "drop down":
+      case surveyTypes[3].type:
         component = <DropDownListQuestion />;
         break;
-      case "rating":
+      case surveyTypes[4].type:
         component = <RatingQuestion />;
         break;
     }
     return React.cloneElement(component, {
-      ...props,
-      question: question,
+      question,
+      handleChange,
     });
   };
 
@@ -50,7 +52,7 @@ export default function QuestionBase({
   };
 
   return (
-    <div {...props}>
+    <div>
       <h3 className="text-2xl px-4 py-4 w-full font-bold">{generateTitle()}</h3>
       {questionTypeSwitch()}
       {error && <p className="text-red mx-4 mt-2 text-red-500">{error}</p>}

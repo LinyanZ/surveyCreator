@@ -4,34 +4,9 @@ import SubmitButton from "../components/common/submitButton";
 import QuestionBase from "../components/questionTypes/questionBase";
 import { AnimatePresence, motion } from "framer-motion";
 import useMeasure from "react-use-measure";
+import surveyTypes from "../surveyTypes";
 
-const defaultQuestions = {
-  "short answer": {
-    type: "short answer",
-  },
-  "single choice": {
-    type: "single choice",
-    options: ["option 1", "option 2"],
-  },
-  "multiple choices": {
-    type: "multiple choices",
-    options: ["option 1", "option 2"],
-  },
-  "drop down": {
-    type: "drop down",
-    options: ["option 1", "option 2"],
-  },
-  rating: {
-    type: "rating",
-    minLabel: "Min",
-    maxLabel: "Max",
-    min: 1,
-    max: 5,
-    step: 1,
-  },
-};
-
-function EditorBase({ question, onChange }) {
+function EditorBase({ question, handleChange }) {
   const { uuid, type } = question;
   return (
     <div className="w-full p-4">
@@ -46,24 +21,32 @@ function EditorBase({ question, onChange }) {
         placeholder="Enter Question Title Here"
         name={`${uuid}.title`}
         id={`${uuid}.title`}
+        value={question.title}
+        onChange={(e) => {
+          handleChange(uuid, {
+            ...question,
+            title: e.target.value,
+          });
+        }}
       />
       <select
         className="text-xl w-full"
         defaultValue="short answer"
         onChange={(e) => {
-          onChange(uuid, {
-            ...defaultQuestions[e.target.value],
+          handleChange(uuid, {
+            ...surveyTypes.find((t) => t.type === e.target.value).default,
+            type: e.target.value,
             title: question.title,
             uuid: question.uuid,
             isRequired: question.isRequired,
           });
         }}
       >
-        <option value="short answer">Short Answer Question</option>
-        <option value="single choice">Single Choice Question</option>
-        <option value="multiple choices">Multiple Choices Question</option>
-        <option value="drop down">Dropdown List Question</option>
-        <option value="rating">Rating Question</option>
+        {surveyTypes.map((t, i) => (
+          <option key={`${question.uuid} editor ${t.type}`} value={t.type}>
+            {t.label}
+          </option>
+        ))}
       </select>
     </div>
   );
@@ -158,7 +141,11 @@ export default function SurveyEditor() {
         {survey.questions.map((q, index) => (
           <ResizeablePanel
             key={q.uuid}
-            className="overflow-hidden rounded-xl my-8 transition hover:shadow-[0px_0px_20px_2px_rgba(0,0,0,0.05)]"
+            className={`overflow-hidden rounded-xl my-8 transition hover:shadow-[0px_0px_20px_2px_rgba(0,0,0,0.05)] ${
+              selected && selected === q.uuid
+                ? "shadow-[0px_0px_20px_2px_rgba(0,0,0,0.05)]"
+                : ""
+            }`}
           >
             <div
               onClick={() => setSelected(q.uuid)}
@@ -169,7 +156,7 @@ export default function SurveyEditor() {
                 question={q}
                 index={index + 1}
                 showIndex={survey.showIndex}
-                onChange={null}
+                handleChange={null}
               />
               <AnimatePresence>
                 {selected && selected === q.uuid && (
@@ -180,7 +167,7 @@ export default function SurveyEditor() {
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0, height: 0 }}
                   >
-                    <EditorBase question={q} onChange={handleChange} />
+                    <EditorBase question={q} handleChange={handleChange} />
                   </motion.div>
                 )}
               </AnimatePresence>
