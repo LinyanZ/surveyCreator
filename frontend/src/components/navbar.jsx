@@ -7,6 +7,12 @@ export default function Navbar() {
         <li>
           <NavLink to="">Home</NavLink>
         </li>
+        <li>
+          <NavLink to="survey">Survey</NavLink>
+        </li>
+        <li>
+          <NavLink to="create">Create Survey</NavLink>
+        </li>
         <li className="ml-auto">
           <NavLink to="login">Login</NavLink>
         </li>

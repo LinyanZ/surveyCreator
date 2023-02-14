@@ -24,7 +24,7 @@ export default function RatingQuestion({ question, onChange }) {
           key={`${uuid} ${r}`}
           type="button"
           onClick={() => {
-            onChange(question, r);
+            onChange && onChange(question, r);
             setSelectedRating(r);
           }}
         >

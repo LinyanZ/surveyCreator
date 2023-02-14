@@ -3,7 +3,7 @@ export default function SingleChoiceQuestion({ question, onChange }) {
 
   return (
     <>
-      {options.map((option) => (
+      {options?.map((option) => (
         <div key={`${uuid} ${option}`} className="block px-4 py-1 text-2xl">
           <input
             className="mr-2"
@@ -12,7 +12,7 @@ export default function SingleChoiceQuestion({ question, onChange }) {
             name={uuid}
             value={`${uuid} ${option}`}
             onChange={(e) => {
-              onChange(question, option);
+              onChange && onChange(question, option);
             }}
           />
           <label htmlFor={`${uuid} ${option}`}>{option}</label>

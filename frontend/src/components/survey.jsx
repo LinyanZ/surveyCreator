@@ -4,7 +4,7 @@ import Joi from "joi";
 import SubmitButton from "./common/submitButton";
 import QuestionBase from "./questionTypes/questionBase";
 
-export default function Survey({ survey, showIndex }) {
+export default function Survey({ survey }) {
   const [submission, setSubmission] = useState([]);
   const [errors, setErrors] = useState({});
 
@@ -14,8 +14,8 @@ export default function Survey({ survey, showIndex }) {
       uuid: question.uuid,
       answer: value,
     });
+    validate(newSubmission, question.uuid);
     setSubmission(newSubmission);
-    validate(newSubmission);
   };
 
   const answerSchema = Joi.alternatives().try(
@@ -24,16 +24,21 @@ export default function Survey({ survey, showIndex }) {
     Joi.number().required()
   );
 
-  const validate = (s) => {
-    const newErrors = {};
+  // check if the answer is empty when a question is marked as required
+  const validate = (s, uuid = null) => {
+    console.log(uuid);
+    const newErrors = { ...errors };
+
     for (const question of survey.questions) {
-      // check if the answer is empty when a question is marked as required
-      if (question.isRequired) {
+      if (question.isRequired && (!uuid || uuid === question.uuid)) {
         const answer = s.find((q) => q.uuid === question.uuid)?.answer;
         const { error } = answerSchema.validate(answer);
+
         if (!answer || error) {
           newErrors[question.uuid] =
             "This question is required to be answered.";
+        } else {
+          delete newErrors[question.uuid];
         }
       }
     }
@@ -42,48 +47,30 @@ export default function Survey({ survey, showIndex }) {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
     if (validate(submission)) {
       console.log(submission);
     }
   };
 
   return (
-    <div className="w-full max-w-screen-lg mx-auto p-8 my-8">
-      {/* <label htmlFor="surveyTitle" className="hidden">
-        Survey Title
-      </label>
-      <input
-        className="text-4xl font-bold w-full py-2 px-4 focus:outline-none border-b-2 border-transparent focus:border-neutral-200"
-        type="text"
-        placeholder="Survey Title"
-        name="surveyTitle"
-        id="surveyTitle"
-      />
-      <label htmlFor="surveyDescription" className="hidden">
-        Survey Description
-      </label>
-      <input
-        className="text-2xl w-full py-2 px-4 focus:outline-none border-b-2 border-transparent focus:border-neutral-200"
-        type="text"
-        placeholder="Survey Description"
-        name="surveyDescription"
-        id="surveyDescription"
-      /> */}
+    <form className="w-full max-w-screen-lg mx-auto p-8 my-8">
       <h1 className="text-4xl font-bold w-full py-2 px-4">{survey.title}</h1>
       <h2 className="text-2xl w-full py-2 px-4">{survey.description}</h2>
       <div className="h-[1px] w-full bg-neutral-200 my-8" />
       {survey.questions.map((q, index) => (
         <QuestionBase
           key={q.uuid}
+          className="w-full my-8"
           question={q}
           index={index + 1}
-          showIndex={showIndex}
+          showIndex={survey.showIndex}
           onChange={handleChange}
           error={errors[q.uuid]}
         />
       ))}
       <SubmitButton onClick={handleSubmit}>Submit</SubmitButton>
-    </div>
+    </form>
   );
 }

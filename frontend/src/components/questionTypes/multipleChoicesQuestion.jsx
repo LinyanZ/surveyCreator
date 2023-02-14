@@ -14,7 +14,7 @@ export default function MultipleChoicesQuestion({ question, onChange }) {
     const answers = [];
     for (let i = 0; i < options.length; i++)
       if (newCheckedOption[i]) answers.push(options[i]);
-    onChange(question, answers);
+    onChange && onChange(question, answers);
   };
 
   return (

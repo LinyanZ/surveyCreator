@@ -44,17 +44,17 @@ export default function QuestionBase({
     let formattedTitle = "";
     if (showIndex) formattedTitle += `${index}. `;
 
-    formattedTitle += title;
+    formattedTitle += title ? title : "Empty Question Title";
 
     if (question.isRequired) formattedTitle += "*";
     return formattedTitle;
   };
 
   return (
-    <form className="w-full my-8">
-      <h3 className="text-2xl px-4 py-2 w-full font-bold">{generateTitle()}</h3>
+    <div {...props}>
+      <h3 className="text-2xl px-4 py-4 w-full font-bold">{generateTitle()}</h3>
       {questionTypeSwitch()}
       {error && <p className="text-red mx-4 mt-2 text-red-500">{error}</p>}
-    </form>
+    </div>
   );
 }

@@ -40,6 +40,7 @@ const survey = {
       uuid: uuid(),
     },
   ],
+  showIndex: true,
 };
 
 export default survey;
