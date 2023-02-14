@@ -26,7 +26,6 @@ export default function Survey({ survey }) {
 
   // check if the answer is empty when a question is marked as required
   const validate = (s, uuid = null) => {
-    console.log(uuid);
     const newErrors = { ...errors };
 
     for (const question of survey.questions) {
@@ -55,7 +54,7 @@ export default function Survey({ survey }) {
   };
 
   return (
-    <form className="w-full max-w-screen-lg mx-auto p-8 my-8">
+    <div className="w-full max-w-screen-lg mx-auto p-8 my-8">
       <h1 className="text-4xl font-bold w-full py-2 px-4">{survey.title}</h1>
       <h2 className="text-2xl w-full py-2 px-4">{survey.description}</h2>
       <div className="h-[1px] w-full bg-neutral-200 my-8" />
@@ -66,11 +65,11 @@ export default function Survey({ survey }) {
           question={q}
           index={index + 1}
           showIndex={survey.showIndex}
-          onChange={handleChange}
+          handleChange={handleChange}
           error={errors[q.uuid]}
         />
       ))}
       <SubmitButton onClick={handleSubmit}>Submit</SubmitButton>
-    </form>
+    </div>
   );
 }

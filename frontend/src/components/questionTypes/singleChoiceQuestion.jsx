@@ -1,4 +1,4 @@
-export default function SingleChoiceQuestion({ question, onChange }) {
+export default function SingleChoiceQuestion({ question, handleChange }) {
   const { options, uuid } = question;
 
   return (
@@ -12,7 +12,7 @@ export default function SingleChoiceQuestion({ question, onChange }) {
             name={uuid}
             value={`${uuid} ${option}`}
             onChange={(e) => {
-              onChange && onChange(question, option);
+              handleChange && handleChange(question, e.target.value);
             }}
           />
           <label htmlFor={`${uuid} ${option}`}>{option}</label>

@@ -35,7 +35,6 @@ export default function QuestionBase({
     }
     return React.cloneElement(component, {
       ...props,
-      key: question.uuid,
       question: question,
     });
   };

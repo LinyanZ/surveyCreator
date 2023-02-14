@@ -1,21 +1,10 @@
 import { useState } from "react";
 
-export default function MultipleChoicesQuestion({ question, onChange }) {
+export default function MultipleChoicesQuestion({ question, handleChange }) {
   const { options, uuid } = question;
   const [checkedOptions, setCheckedOptions] = useState(
     new Array(options.length).fill(false)
   );
-
-  const handleChange = (e, index) => {
-    const newCheckedOption = [...checkedOptions];
-    newCheckedOption[index] = e.target.checked;
-    setCheckedOptions(newCheckedOption);
-
-    const answers = [];
-    for (let i = 0; i < options.length; i++)
-      if (newCheckedOption[i]) answers.push(options[i]);
-    onChange && onChange(question, answers);
-  };
 
   return (
     <>
@@ -27,7 +16,16 @@ export default function MultipleChoicesQuestion({ question, onChange }) {
             id={`${uuid} ${option}`}
             name={uuid}
             value={`${uuid} ${option}`}
-            onChange={(e) => handleChange(e, index)}
+            onChange={(e) => {
+              const newCheckedOption = [...checkedOptions];
+              newCheckedOption[index] = e.target.checked;
+              setCheckedOptions(newCheckedOption);
+
+              const answers = [];
+              for (let i = 0; i < options.length; i++)
+                if (newCheckedOption[i]) answers.push(options[i]);
+              handleChange && handleChange(question, answers);
+            }}
           />
           <label htmlFor={`${uuid} ${option}`}>{option}</label>
         </div>

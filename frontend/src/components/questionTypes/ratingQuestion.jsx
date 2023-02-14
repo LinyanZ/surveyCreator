@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export default function RatingQuestion({ question, onChange }) {
+export default function RatingQuestion({ question, handleChange }) {
   const { minLabel, maxLabel, min, max, step, uuid } = question;
   const [ratings, setRatings] = useState([]);
   const [selectedRating, setSelectedRating] = useState(null);
@@ -24,7 +24,7 @@ export default function RatingQuestion({ question, onChange }) {
           key={`${uuid} ${r}`}
           type="button"
           onClick={() => {
-            onChange && onChange(question, r);
+            handleChange && handleChange(question, r);
             setSelectedRating(r);
           }}
         >
