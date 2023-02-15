@@ -9,7 +9,7 @@ export default function MultipleChoicesQuestion({ question, handleChange }) {
   return (
     <>
       {options.map((option, index) => (
-        <div key={`${uuid} ${option}`} className="block px-4 py-1 text-2xl">
+        <div key={`${uuid} ${option}`} className="block py-1 text-2xl">
           <input
             className="mr-2"
             type="checkbox"

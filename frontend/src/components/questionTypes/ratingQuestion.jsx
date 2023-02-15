@@ -14,7 +14,7 @@ export default function RatingQuestion({ question, handleChange }) {
   }, [min, max, step]);
 
   return (
-    <div className="flex gap-x-8 gap-y-2 px-4 text-2xl w-full flex-wrap">
+    <div className="flex gap-x-8 gap-y-2 text-2xl w-full flex-wrap">
       <p>{minLabel}</p>
       {ratings.map((r) => (
         <button

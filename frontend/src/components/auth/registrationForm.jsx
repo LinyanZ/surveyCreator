@@ -56,6 +56,8 @@ export default function RegistrationForm() {
           value={account.username}
           onChange={handleChange}
           error={errors.username}
+          inputStyle="block text-xl w-full my-4 border rounded-xl p-4 focus:outline-neutral-200"
+          errorStyle="text-red mt-2 text-red-500 mx-4"
         />
         <Input
           name="password"
@@ -64,6 +66,8 @@ export default function RegistrationForm() {
           value={account.password}
           onChange={handleChange}
           error={errors.password}
+          inputStyle="block text-xl w-full my-4 border rounded-xl p-4 focus:outline-neutral-200"
+          errorStyle="text-red mt-2 text-red-500 mx-4"
         />
         <Input
           name="reEnterPassword"
@@ -72,6 +76,8 @@ export default function RegistrationForm() {
           value={account.reEnterPassword}
           onChange={handleChange}
           error={errors.reEnterPassword}
+          inputStyle="block text-xl w-full my-4 border rounded-xl p-4 focus:outline-neutral-200"
+          errorStyle="text-red mt-2 text-red-500 mx-4"
         />
         <SubmitButton disabled={Object.keys(errors).length !== 0}>
           Register

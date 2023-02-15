@@ -13,6 +13,7 @@ export default function QuestionBase({
   error,
   showIndex,
   handleChange,
+  ...props
 }) {
   const { title } = question;
 
@@ -52,10 +53,10 @@ export default function QuestionBase({
   };
 
   return (
-    <div>
-      <h3 className="text-2xl px-4 py-4 w-full font-bold">{generateTitle()}</h3>
+    <div {...props}>
+      <h3 className="text-2xl py-2 mt-2 w-full font-bold">{generateTitle()}</h3>
       {questionTypeSwitch()}
-      {error && <p className="text-red mx-4 mt-2 text-red-500">{error}</p>}
+      {error && <p className="text-red mt-2 text-red-500">{error}</p>}
     </div>
   );
 }

@@ -55,8 +55,8 @@ export default function Survey({ survey }) {
 
   return (
     <div className="w-full max-w-screen-lg mx-auto p-8 my-8">
-      <h1 className="text-4xl font-bold w-full py-2 px-4">{survey.title}</h1>
-      <h2 className="text-2xl w-full py-2 px-4">{survey.description}</h2>
+      <h1 className="text-4xl font-bold w-full py-2">{survey.title}</h1>
+      <h2 className="text-2xl w-full py-2">{survey.description}</h2>
       <div className="h-[1px] w-full bg-neutral-200 my-8" />
       {survey.questions.map((q, index) => (
         <QuestionBase

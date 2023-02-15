@@ -1,11 +1,21 @@
-export default function Input({ name, label, type, value, onChange, error }) {
+export default function Input({
+  name,
+  label,
+  type,
+  value,
+  onChange,
+  error,
+  inputStyle,
+  errorStyle,
+  labelStyle = "hidden",
+}) {
   return (
     <>
-      <label className="hidden" htmlFor={name}>
+      <label className={labelStyle} htmlFor={name}>
         {label}
       </label>
       <input
-        className="block text-xl w-full my-4 border rounded-xl p-4 focus:outline-neutral-200"
+        className={inputStyle}
         id={name}
         name={name}
         type={type}
@@ -13,7 +23,7 @@ export default function Input({ name, label, type, value, onChange, error }) {
         value={value}
         onChange={onChange}
       />
-      {error && <p className="text-red mx-4 mt-2 text-red-500">{error}</p>}
+      {error && <p className={errorStyle}>{error}</p>}
     </>
   );
 }

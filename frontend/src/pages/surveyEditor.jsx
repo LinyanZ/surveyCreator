@@ -5,22 +5,33 @@ import QuestionBase from "../components/questionTypes/questionBase";
 import { AnimatePresence, motion } from "framer-motion";
 import useMeasure from "react-use-measure";
 import surveyTypes from "../surveyTypes";
+import RatingQuestionEditor from "../components/editorTypes/ratingQuestionEditor";
+import Input from "../components/common/input";
 
 function EditorBase({ question, handleChange }) {
   const { uuid, type } = question;
+
+  const editorTypeSwitch = (type) => {
+    switch (type) {
+      case surveyTypes[4].type:
+        return <RatingQuestionEditor question={question} />;
+      case surveyTypes[1].type:
+      case surveyTypes[2].type:
+      case surveyTypes[3].type:
+        return <div>options</div>;
+      default:
+        return null;
+    }
+  };
+
   return (
-    <div className="w-full p-4">
-      <div className="h-[1px] w-full bg-neutral-200" />
-      <p className="text-2xl font-bold mt-4">Property Editor</p>
-      <label htmlFor={`${uuid}.title`} className="hidden">
-        Question Title
-      </label>
-      <input
-        className="text-2xl w-full py-2 my-2 focus:outline-none border-b-2 border-transparent focus:border-neutral-200"
-        type="text"
-        placeholder="Enter Question Title Here"
+    <div className="w-full">
+      <p className="text-2xl font-bold my-4">Properties</p>
+      <Input
         name={`${uuid}.title`}
-        id={`${uuid}.title`}
+        label="Enter Question Title Here"
+        type="text"
+        inputStyle="text-xl py-2 w-full focus:outline-none border-b-2 border-neutral-300 focus:border-neutral-600"
         value={question.title}
         onChange={(e) => {
           handleChange(uuid, {
@@ -28,26 +39,39 @@ function EditorBase({ question, handleChange }) {
             title: e.target.value,
           });
         }}
+        error={
+          question.title.trim() === ""
+            ? "Question title is not allowed to be empty."
+            : null
+        }
+        errorStyle="text-red my-2 text-red-500"
       />
-      <select
-        className="text-xl w-full"
-        defaultValue="short answer"
-        onChange={(e) => {
-          handleChange(uuid, {
-            ...surveyTypes.find((t) => t.type === e.target.value).default,
-            type: e.target.value,
-            title: question.title,
-            uuid: question.uuid,
-            isRequired: question.isRequired,
-          });
-        }}
-      >
-        {surveyTypes.map((t, i) => (
-          <option key={`${question.uuid} editor ${t.type}`} value={t.type}>
-            {t.label}
-          </option>
-        ))}
-      </select>
+      <div className="flex text-xl gap-x-8 py-2 mt-4 flex-wrap">
+        <label className="min-w-[200px]" htmlFor={`${uuid}.type`}>
+          Question Type
+        </label>
+        <select
+          className="flex-grow"
+          name={`${uuid}.title`}
+          defaultValue="short answer"
+          onChange={(e) => {
+            handleChange(uuid, {
+              ...surveyTypes.find((t) => t.type === e.target.value).default,
+              type: e.target.value,
+              title: question.title,
+              uuid: question.uuid,
+              isRequired: question.isRequired,
+            });
+          }}
+        >
+          {surveyTypes.map((t, i) => (
+            <option key={`${question.uuid} editor ${t.type}`} value={t.type}>
+              {t.label}
+            </option>
+          ))}
+        </select>
+      </div>
+      {editorTypeSwitch(type)}
     </div>
   );
 }
@@ -59,7 +83,7 @@ function ResizeablePanel({ children, ...props }) {
     <motion.div
       animate={{
         height: height || "auto",
-        // transition: { duration: 0.15, ease: "easeOut" },
+        transition: { duration: 0.2 },
       }}
       {...props}
     >
@@ -149,15 +173,18 @@ export default function SurveyEditor() {
           >
             <div
               onClick={() => setSelected(q.uuid)}
-              className="cursor-pointer py-4 px-4"
+              className="cursor-pointer py-8 px-8"
             >
-              <QuestionBase
-                className="w-full"
-                question={q}
-                index={index + 1}
-                showIndex={survey.showIndex}
-                handleChange={null}
-              />
+              <p className="text-2xl font-bold mb-4">Question Preview</p>
+              <div className="p-2 px-4 border rounded-xl">
+                <QuestionBase
+                  className="w-full"
+                  question={q}
+                  index={index + 1}
+                  showIndex={survey.showIndex}
+                  handleChange={null}
+                />
+              </div>
               <AnimatePresence>
                 {selected && selected === q.uuid && (
                   <motion.div
@@ -165,7 +192,7 @@ export default function SurveyEditor() {
                     key={`${q.uuid} editor`}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    exit={{ opacity: 0, height: 0 }}
+                    // exit={{ opacity: 0, height: 0 }}
                   >
                     <EditorBase question={q} handleChange={handleChange} />
                   </motion.div>
