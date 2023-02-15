@@ -54,7 +54,9 @@ export default function QuestionBase({
 
   return (
     <div {...props}>
-      <h3 className="w-full py-2 mt-2 text-2xl font-bold">{generateTitle()}</h3>
+      <h3 className="w-full py-2 mt-2 text-xl font-bold sm:text-2xl">
+        {generateTitle()}
+      </h3>
       {questionTypeSwitch()}
       {error && <p className="mt-2 text-red-500 text-red">{error}</p>}
     </div>

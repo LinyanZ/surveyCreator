@@ -28,12 +28,12 @@ export default function EditorBase({ question, handleChange }) {
 
   return (
     <div className="w-full">
-      <p className="my-4 text-2xl font-bold">Properties</p>
+      <p className="my-4 text-xl font-bold sm:text-2xl">Properties</p>
       <Input
         name={`${uuid}.title`}
         label="Enter Question Title Here"
         type="text"
-        inputStyle="text-xl py-2 w-full focus:outline-none border-b-2 border-neutral-300 focus:border-neutral-600"
+        inputStyle="text-lg sm:text-xl py-2 w-full focus:outline-none border-b-2 border-neutral-300 focus:border-neutral-600"
         value={question.title}
         onChange={(e) => {
           handleChange(uuid, {
@@ -46,9 +46,9 @@ export default function EditorBase({ question, handleChange }) {
             ? "Question title is not allowed to be empty."
             : null
         }
-        errorStyle="text-red my-2 text-red-500"
+        errorStyle="text-lg sm:text-xl text-red my-2 text-red-500"
       />
-      <div className="flex flex-wrap py-2 mt-4 text-xl gap-x-8">
+      <div className="flex flex-wrap py-2 mt-4 text-lg sm:text-xl gap-x-8">
         <label className="min-w-[200px] font-bold" htmlFor={`${uuid}.type`}>
           Question Type
         </label>

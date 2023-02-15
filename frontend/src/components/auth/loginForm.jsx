@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import Joi from "joi";
 import Input from "../common/input";
 import { validate } from "../../utils";
-import SubmitButton from "../common/submitButton";
 
 export default function LoginForm() {
   const [account, setAccount] = useState({
@@ -59,9 +58,13 @@ export default function LoginForm() {
           errorStyle="text-red mt-2 text-red-500 mx-4"
         />
         <p className="text-xl text-right">Forgot password?</p>
-        <SubmitButton disabled={Object.keys(errors).length !== 0}>
+        <button
+          className="block w-full p-4 my-8 text-2xl text-white transition-colors border rounded-xl bg-emerald-500 hover:bg-emerald-400 disabled:bg-neutral-400"
+          type="submit"
+          disabled={Object.keys(errors).length !== 0}
+        >
           Login
-        </SubmitButton>
+        </button>
         <div className="w-full h-[1px] bg-neutral-200 my-8" />
         <Link
           className="block mx-auto my-4 text-xl text-center w-fit"

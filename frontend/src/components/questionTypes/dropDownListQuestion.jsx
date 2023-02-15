@@ -3,7 +3,7 @@ export default function DropDownListQuestion({ question, handleChange }) {
 
   return (
     <select
-      className="w-full py-1 text-2xl"
+      className="w-full py-1 text-xl sm:text-2xl"
       defaultValue=""
       onChange={(e) => handleChange && handleChange(question, e.target.value)}
     >
