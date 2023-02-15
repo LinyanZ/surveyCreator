@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 export default function Navbar() {
   return (
     <nav className="h-[4rem] shadow-[0px_0px_10px_2px_rgba(0,0,0,0.05)]">
-      <ul className="flex gap-8 text-xl h-full items-center max-w-5xl mx-auto w-full p-8">
+      <ul className="flex items-center w-full h-full max-w-5xl gap-8 p-8 mx-auto text-xl">
         <li>
           <NavLink to="">Home</NavLink>
         </li>

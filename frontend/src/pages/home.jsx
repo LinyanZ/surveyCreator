@@ -5,7 +5,7 @@ const surveys = Array(10).fill(survey);
 
 export default function Home() {
   return (
-    <div className="max-w-screen-lg mx-auto p-8">
+    <div className="max-w-screen-lg p-8 mx-auto">
       {surveys.map((s, i) => (
         <Link
           key={i}

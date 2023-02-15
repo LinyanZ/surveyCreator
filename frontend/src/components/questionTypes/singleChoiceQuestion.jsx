@@ -3,8 +3,8 @@ export default function SingleChoiceQuestion({ question, handleChange }) {
 
   return (
     <>
-      {options?.map((option) => (
-        <div key={`${uuid} ${option}`} className="block py-1 text-2xl">
+      {options?.map((option, i) => (
+        <div key={`${uuid} ${option} ${i}`} className="block py-1 text-2xl">
           <input
             className="mr-2"
             type="radio"

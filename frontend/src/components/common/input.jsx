@@ -8,6 +8,7 @@ export default function Input({
   inputStyle,
   errorStyle,
   labelStyle = "hidden",
+  placeholder = null,
 }) {
   return (
     <>
@@ -19,7 +20,7 @@ export default function Input({
         id={name}
         name={name}
         type={type}
-        placeholder={label}
+        placeholder={placeholder ? placeholder : label}
         value={value}
         onChange={onChange}
       />

@@ -1,20 +1,30 @@
 import { useEffect, useState } from "react";
 
 export default function RatingQuestion({ question, handleChange }) {
-  const { minLabel, maxLabel, min, max, step, uuid } = question;
+  const { minLabel, maxLabel, uuid } = question;
   const [ratings, setRatings] = useState([]);
   const [selectedRating, setSelectedRating] = useState(null);
 
   useEffect(() => {
+    const min = Number(question.min);
+    const max = Number(question.max);
+    const step = Number(question.step);
+
     const newRatings = [];
-    for (let i = min; i <= max; i += step) {
-      newRatings.push(i);
-    }
+
+    if (step * (max - min) > 0)
+      for (
+        let i = min;
+        (step < 0 && i >= max) || (step > 0 && i <= max);
+        i += step
+      )
+        newRatings.push(i);
+
     setRatings(newRatings);
-  }, [min, max, step]);
+  }, [question]);
 
   return (
-    <div className="flex gap-x-8 gap-y-2 text-2xl w-full flex-wrap">
+    <div className="flex flex-wrap w-full text-2xl gap-x-8 gap-y-2">
       <p>{minLabel}</p>
       {ratings.map((r) => (
         <button
