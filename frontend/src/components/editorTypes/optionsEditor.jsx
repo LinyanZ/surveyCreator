@@ -1,11 +1,11 @@
 import Input from "../common/input";
 
-export default function OptionsEditor({ question, handleChange }) {
+export default function OptionsEditor({ question, handleChange, error }) {
   return (
     <div>
       <p className="my-4 text-xl font-bold">Options</p>
       {question.options.map((o, i) => (
-        <div className="flex flex-wrap my-2 text-xl" key={i}>
+        <div className="flex flex-wrap gap-x-4 my-2 text-xl" key={i}>
           <Input
             value={o}
             onChange={(e) => {
@@ -13,10 +13,10 @@ export default function OptionsEditor({ question, handleChange }) {
               update.options[i] = e.target.value;
               handleChange(question.uuid, update);
             }}
-            inputStyle="flex-grow text-xl"
+            inputStyle="flex-grow text-xl my-2"
           />
           <button
-            className="w-32 h-10 text-white transition bg-red-500 rounded-md hover:bg-red-400"
+            className="w-10 h-10 flex justify-center items-center my-2 text-white transition bg-red-500 rounded-md hover:bg-red-400"
             type="button"
             onClick={() => {
               const update = { ...question };
@@ -24,12 +24,12 @@ export default function OptionsEditor({ question, handleChange }) {
               handleChange(question.uuid, update);
             }}
           >
-            Remove
+            -
           </button>
         </div>
       ))}
       <button
-        className="block w-32 h-10 ml-auto text-xl text-white transition rounded-md bg-emerald-500 hover:bg-emerald-400"
+        className="w-10 h-10 mt-4 flex justify-center items-center ml-auto text-xl text-white transition rounded-md bg-emerald-500 hover:bg-emerald-400"
         type="button"
         onClick={() => {
           const update = { ...question };
@@ -37,8 +37,13 @@ export default function OptionsEditor({ question, handleChange }) {
           handleChange(question.uuid, update);
         }}
       >
-        Add
+        +
       </button>
+      {error && error.options && (
+        <p className="text-lg sm:text-xl text-red my-2 text-red-500">
+          This question should contain at least one option.
+        </p>
+      )}
     </div>
   );
 }

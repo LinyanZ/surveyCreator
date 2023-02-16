@@ -1,8 +1,8 @@
 import { v4 as uuid } from "uuid";
 
 const survey = {
-  title: "Survey Title",
-  description: "Survey Description",
+  title: "A Very Long Survey Title",
+  description: "A Very Very Long Survey Description",
   questions: [
     {
       type: "short answer",

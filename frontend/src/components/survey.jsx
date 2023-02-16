@@ -53,14 +53,14 @@ export default function Survey({ survey }) {
   };
 
   return (
-    <div className="w-full max-w-screen-lg px-4 mx-auto my-4 sm:my-8 sm:px-8">
+    <div className="w-full max-w-screen-lg mx-auto my-8 px-8">
       <h1 className="w-full py-2 text-4xl font-bold">{survey.title}</h1>
       <h2 className="w-full py-2 text-2xl">{survey.description}</h2>
-      <div className="h-[1px] w-full bg-neutral-200 my-4 sm:my-8" />
+      <div className="h-[1px] w-full bg-neutral-200 my-8" />
       {survey.questions.map((q, index) => (
         <Question
           key={q.uuid}
-          className="w-full my-4 sm:my-8"
+          className="w-full my-8"
           question={q}
           index={index + 1}
           showIndex={survey.showIndex}

@@ -5,7 +5,19 @@ const inputStyle =
 const errorStyle = "text-red text-red-500";
 const labelStyle = "text-xl font-bold";
 
-export default function RatingQuestionEditor({ question, handleChange }) {
+export default function RatingQuestionEditor({
+  question,
+  handleChange,
+  error,
+}) {
+  const {
+    minLabel: minLabelError,
+    maxLabel: maxLabelError,
+    min: minError,
+    max: maxError,
+    step: stepError,
+  } = error || {};
+
   return (
     <div className="mt-4">
       <Input
@@ -23,6 +35,11 @@ export default function RatingQuestionEditor({ question, handleChange }) {
           });
         }}
       />
+      {minLabelError && (
+        <p className="text-lg sm:text-xl text-red my-2 text-red-500">
+          Min label is not allowed to be empty.
+        </p>
+      )}
       <Input
         name="maxLabel"
         label="Max Label"
@@ -38,6 +55,11 @@ export default function RatingQuestionEditor({ question, handleChange }) {
           });
         }}
       />
+      {maxLabelError && (
+        <p className="text-lg sm:text-xl text-red my-2 text-red-500">
+          Max label is not allowed to be empty.
+        </p>
+      )}
       <Input
         name="min"
         label="Min Value"
@@ -47,9 +69,17 @@ export default function RatingQuestionEditor({ question, handleChange }) {
         labelStyle={labelStyle}
         value={question.min}
         onChange={(e) => {
-          handleChange(question.uuid, { ...question, min: e.target.value });
+          handleChange(question.uuid, {
+            ...question,
+            min: Number(e.target.value),
+          });
         }}
       />
+      {minError && (
+        <p className="text-lg sm:text-xl text-red my-2 text-red-500">
+          Min value should be less than the Max value.
+        </p>
+      )}
       <Input
         name="max"
         label="Max Value"
@@ -59,9 +89,17 @@ export default function RatingQuestionEditor({ question, handleChange }) {
         labelStyle={labelStyle}
         value={question.max}
         onChange={(e) => {
-          handleChange(question.uuid, { ...question, max: e.target.value });
+          handleChange(question.uuid, {
+            ...question,
+            max: Number(e.target.value),
+          });
         }}
       />
+      {maxError && (
+        <p className="text-lg sm:text-xl text-red my-2 text-red-500">
+          Min value should be less than the Max value.
+        </p>
+      )}
       <Input
         name="step"
         label="Step Value"
@@ -71,9 +109,17 @@ export default function RatingQuestionEditor({ question, handleChange }) {
         labelStyle={labelStyle}
         value={question.step}
         onChange={(e) => {
-          handleChange(question.uuid, { ...question, step: e.target.value });
+          handleChange(question.uuid, {
+            ...question,
+            step: Number(e.target.value),
+          });
         }}
       />
+      {stepError && (
+        <p className="text-lg sm:text-xl text-red my-2 text-red-500">
+          Step value can not be 0.
+        </p>
+      )}
     </div>
   );
 }

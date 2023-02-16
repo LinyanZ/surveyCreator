@@ -3,7 +3,7 @@ import surveyTypes from "../../surveyTypes";
 import Input from "../common/input";
 import OptionsEditor from "./optionsEditor";
 
-export default function QuestionEditor({ question, handleChange }) {
+export default function QuestionEditor({ question, handleChange, error }) {
   const { uuid, type } = question;
 
   const editorTypeSwitch = (type) => {
@@ -13,13 +13,18 @@ export default function QuestionEditor({ question, handleChange }) {
           <RatingQuestionEditor
             question={question}
             handleChange={handleChange}
+            error={error}
           />
         );
       case surveyTypes[1].type:
       case surveyTypes[2].type:
       case surveyTypes[3].type:
         return (
-          <OptionsEditor question={question} handleChange={handleChange} />
+          <OptionsEditor
+            question={question}
+            handleChange={handleChange}
+            error={error}
+          />
         );
       default:
         return null;
@@ -42,9 +47,7 @@ export default function QuestionEditor({ question, handleChange }) {
           });
         }}
         error={
-          question.title.trim() === ""
-            ? "Question title is not allowed to be empty."
-            : null
+          error && error.title && "Question title is not allowed to be empty."
         }
         errorStyle="text-lg sm:text-xl text-red my-2 text-red-500"
       />

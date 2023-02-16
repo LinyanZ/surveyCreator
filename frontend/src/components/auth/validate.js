@@ -5,7 +5,8 @@ const validate = (obj, schema, propertyName = null) => {
   const { error } = schema.validate(obj, options);
   if (error) {
     error.details.forEach((e) => {
-      if (propertyName.includes(e.path[0])) newErrors[e.path[0]] = e.message;
+      if (!propertyName || propertyName.includes(e.path[0]))
+        newErrors[e.path[0]] = e.message;
     });
   }
 

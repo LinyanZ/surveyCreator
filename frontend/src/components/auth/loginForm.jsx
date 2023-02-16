@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import Joi from "joi";
 import Input from "../common/input";
-import { validate } from "../../utils";
+import { validate } from "./validate";
 
 export default function LoginForm() {
   const [account, setAccount] = useState({
