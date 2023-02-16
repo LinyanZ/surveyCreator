@@ -3,8 +3,8 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 
 import ResizeablePanel from "../components/common/resizeablePanel";
-import QuestionBase from "../components/questionTypes/questionBase";
-import EditorBase from "../components/editorTypes/editorBase";
+import Question from "../components/questionTypes/question";
+import QuestionEditor from "../components/editorTypes/questionEditor";
 import Input from "../components/common/input";
 
 export default function SurveyEditor() {
@@ -92,7 +92,7 @@ export default function SurveyEditor() {
                 Question Preview
               </p>
               <div className="p-2 px-4 border rounded-xl">
-                <QuestionBase
+                <Question
                   className="w-full"
                   question={q}
                   index={index + 1}
@@ -107,7 +107,7 @@ export default function SurveyEditor() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                 >
-                  <EditorBase question={q} handleChange={handleChange} />
+                  <QuestionEditor question={q} handleChange={handleChange} />
                 </motion.div>
               )}
             </div>

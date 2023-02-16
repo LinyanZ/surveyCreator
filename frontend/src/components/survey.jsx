@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import Joi from "joi";
 
-import SubmitButton from "./common/submitButton";
-import QuestionBase from "./questionTypes/questionBase";
+import Question from "./questionTypes/question";
 
 export default function Survey({ survey }) {
   const [submission, setSubmission] = useState([]);
@@ -59,7 +58,7 @@ export default function Survey({ survey }) {
       <h2 className="w-full py-2 text-2xl">{survey.description}</h2>
       <div className="h-[1px] w-full bg-neutral-200 my-4 sm:my-8" />
       {survey.questions.map((q, index) => (
-        <QuestionBase
+        <Question
           key={q.uuid}
           className="w-full my-4 sm:my-8"
           question={q}

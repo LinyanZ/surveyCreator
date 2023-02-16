@@ -40,7 +40,13 @@ export default function RegistrationForm() {
     const { name, value } = input;
     const newAccount = { ...account };
     newAccount[input.name] = value;
-    setErrors(validate(newAccount, schema));
+    setErrors(
+      validate(
+        newAccount,
+        schema,
+        name === "username" ? [name] : ["reEnterPassword", "password"]
+      )
+    );
     setAccount((a) => ({ ...a, [name]: value }));
   };
 

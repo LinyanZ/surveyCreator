@@ -3,7 +3,7 @@ import surveyTypes from "../../surveyTypes";
 import Input from "../common/input";
 import OptionsEditor from "./optionsEditor";
 
-export default function EditorBase({ question, handleChange }) {
+export default function QuestionEditor({ question, handleChange }) {
   const { uuid, type } = question;
 
   const editorTypeSwitch = (type) => {

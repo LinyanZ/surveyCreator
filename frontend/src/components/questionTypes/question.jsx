@@ -7,7 +7,7 @@ import RatingQuestion from "./ratingQuestion";
 
 import surveyTypes from "../../surveyTypes";
 
-export default function QuestionBase({
+export default function Question({
   question,
   index,
   error,

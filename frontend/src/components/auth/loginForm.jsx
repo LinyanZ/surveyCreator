@@ -29,7 +29,7 @@ export default function LoginForm() {
     const { name, value } = input;
     const newAccount = { ...account };
     newAccount[input.name] = value;
-    setErrors(validate(newAccount, schema));
+    setErrors(validate(newAccount, schema, [name]));
     setAccount((a) => ({ ...a, [name]: value }));
   };
 
