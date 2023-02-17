@@ -25,7 +25,7 @@ export default function Question({
 
     if (question.isRequired) formattedTitle += "*";
     setTitle(formattedTitle);
-  }, [question]);
+  }, [question, index]);
 
   const questionTypeSwitch = () => {
     let component;

@@ -8,6 +8,8 @@ import QuestionEditor from "../components/editorTypes/questionEditor";
 import Input from "../components/common/input";
 import Joi from "joi";
 import surveyTypes from "../surveyTypes";
+import DraggableList from "../components/draggableList";
+import DraggableListItem from "../components/draggableListItem";
 
 const schema = Joi.object({
   title: Joi.string().required().messages({
@@ -97,24 +99,30 @@ const schema = Joi.object({
 
 export default function SurveyEditor() {
   const [survey, setSurvey] = useState({
-    title: "",
-    description: "",
+    title: "title",
+    description: "description",
     showIndex: true,
     questions: [
       {
-        title: "",
+        title: "0",
         type: "short answer",
         uuid: uuid(),
         isRequired: false,
       },
       {
-        title: "",
+        title: "2",
         type: "short answer",
         uuid: uuid(),
         isRequired: false,
       },
       {
-        title: "",
+        title: "3",
+        type: "short answer",
+        uuid: uuid(),
+        isRequired: false,
+      },
+      {
+        title: "4",
         type: "short answer",
         uuid: uuid(),
         isRequired: false,
@@ -196,58 +204,66 @@ export default function SurveyEditor() {
           />
           <div className="h-[1px] w-full bg-neutral-200 my-8" />
         </div>
-        {survey.questions.map((q, index) => (
-          <ResizeablePanel
-            key={q.uuid}
-            className={`overflow-hidden rounded-xl my-8 transition sm:hover:shadow-[0px_0px_20px_2px_rgba(0,0,0,0.05)] ${
-              selected && selected === q.uuid
-                ? "shadow-[0px_0px_20px_2px_rgba(0,0,0,0.05)]"
-                : ""
-            }`}
-          >
-            <div
-              onClick={() => setSelected(q.uuid)}
-              className="p-8 cursor-pointer"
+        <DraggableList
+          items={survey.questions}
+          setItems={(newQuestions) => {
+            const newSurvey = { ...survey };
+            newSurvey.questions = newQuestions;
+            setSurvey(newSurvey);
+          }}
+          itemComponent={(q, i) => (
+            <ResizeablePanel
+              className={`overflow-hidden rounded-xl my-8 transition bg-white sm:hover:shadow-[0px_0px_20px_2px_rgba(0,0,0,0.05)] ${
+                selected && selected === q.uuid
+                  ? "shadow-[0px_0px_20px_2px_rgba(0,0,0,0.05)]"
+                  : ""
+              }`}
             >
-              <p
-                className={`mb-4 text-xl font-bold sm:text-2xl  ${
-                  Object.keys(errors).includes(q.uuid) ? "text-red-400" : ""
-                }`}
+              <div
+                className="p-8 cursor-pointer"
+                onClick={() => setSelected(q.uuid)}
               >
-                Question Preview
-              </p>
-              <div className="p-2 px-4 border rounded-xl">
-                <Question
-                  className="w-full"
-                  question={q}
-                  index={index + 1}
-                  showIndex={survey.showIndex}
-                  handleChange={null}
-                />
-              </div>
-              {selected && selected === q.uuid && (
-                <motion.div
-                  className="overflow-hidden"
-                  key={`${q.uuid} editor`}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
+                <p
+                  className={`mb-4 text-xl font-bold sm:text-2xl  ${
+                    Object.keys(errors).includes(q.uuid) ? "text-red-400" : ""
+                  }`}
                 >
-                  <QuestionEditor
+                  Question Preview
+                </p>
+                <div className="p-2 px-4 border rounded-xl">
+                  <Question
+                    className="w-full"
                     question={q}
-                    handleChange={updateQuestions}
-                    error={errors[q.uuid]}
+                    index={i + 1}
+                    showIndex={survey.showIndex}
+                    handleChange={null}
                   />
-                </motion.div>
-              )}
-            </div>
-          </ResizeablePanel>
-        ))}
+                </div>
+                {selected && selected === q.uuid && (
+                  <motion.div
+                    className="overflow-hidden"
+                    key={`${q.uuid} editor`}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                  >
+                    <QuestionEditor
+                      question={q}
+                      handleChange={updateQuestions}
+                      error={errors[q.uuid]}
+                    />
+                  </motion.div>
+                )}
+              </div>
+            </ResizeablePanel>
+          )}
+        ></DraggableList>
+
         <div className="flex w-full">
           <button
             className="flex-grow p-4 mx-8 text-2xl text-white transition-colors border rounded-xl bg-emerald-500 hover:bg-emerald-400 disabled:bg-neutral-400"
             type="submit"
             onClick={handleSubmit}
-            disabled={Object.keys(errors).length !== 0}
+            // disabled={Object.keys(errors).length !== 0}
           >
             Submit
           </button>
