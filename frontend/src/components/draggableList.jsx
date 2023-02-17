@@ -1,9 +1,5 @@
-import { ref } from "joi";
-import React, { useRef, useEffect } from "react";
+import React, { useRef } from "react";
 import DraggableListItem from "./draggableListItem";
-
-// Prevent rapid reverse swapping
-const buffer = 5;
 
 export default function DraggableList({ items, setItems, itemComponent }) {
   // We need to collect an array of height and position data for all of this component's
@@ -13,22 +9,28 @@ export default function DraggableList({ items, setItems, itemComponent }) {
   const setPosition = (i, offset) => (positions[i] = offset);
   const refs = useRef(Array(items.length)).current;
 
-  const findIndex = (mouseY) => {
+  const findIndex = (mouseY, current) => {
     const n = positions.length;
+    const currentCenter =
+      positions[current].top + positions[current].height / 2;
 
-    // mouse position is above all items, return the first item
-    if (mouseY <= positions[0].top) return 0;
+    const movingUp = mouseY - currentCenter < 0;
 
-    // mouse position is below all items, return the last item
-    if (mouseY >= positions[n - 1].bottom) return n - 1;
-
-    for (let i = 0; i < n; i++) {
-      const { top, bottom } = positions[i];
-      const center = (top + bottom) / 2;
-      if (mouseY >= center - buffer && mouseY < center + buffer) return i;
+    if (movingUp) {
+      if (current === 0) return 0;
+      const prevPosition = positions[current - 1];
+      const prevCenter = prevPosition.top + prevPosition.height / 2;
+      console.log(currentCenter, mouseY, prevCenter);
+      if (mouseY < prevCenter) return current - 1;
+    } else {
+      if (current === n - 1) return n - 1;
+      const nextPosition = positions[current + 1];
+      const nextCenter = nextPosition.top + nextPosition.height / 2;
+      console.log(currentCenter, mouseY, nextCenter);
+      if (mouseY > nextCenter) return current + 1;
     }
 
-    return null;
+    return current;
   };
 
   const move = (items, fromIndex, toIndex) => {
@@ -47,7 +49,7 @@ export default function DraggableList({ items, setItems, itemComponent }) {
   // Find the ideal index for a dragging item based on its position in the array, and its
   // current drag offset. If it's different to its current index, we swap this item with that
   // sibling.
-  const moveItem = (i, mouseY) => {
+  const moveItem = (mouseY, current) => {
     // update position information of all children
     for (let j = 0; j < positions.length; j++) {
       setPosition(j, {
@@ -57,9 +59,8 @@ export default function DraggableList({ items, setItems, itemComponent }) {
       });
     }
 
-    const targetIndex = findIndex(mouseY);
-    if (targetIndex !== null && targetIndex !== i)
-      setItems(move(items, i, targetIndex));
+    const targetIndex = findIndex(mouseY, current);
+    if (targetIndex !== current) setItems(move(items, current, targetIndex));
   };
 
   return (

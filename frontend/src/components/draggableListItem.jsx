@@ -20,7 +20,7 @@ const DraggableListItem = React.forwardRef(
         }}
         dragSnapToOrigin
         dragElastic={1}
-        onDrag={(e, info) => moveItem(index, info.point.y)}
+        onDrag={(e, info) => moveItem(info.point.y, index)}
         style={{ zIndex }}
       >
         {children}
