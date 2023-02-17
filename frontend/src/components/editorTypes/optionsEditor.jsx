@@ -11,7 +11,7 @@ export default function OptionsEditor({ question, handleChange, error }) {
             onChange={(e) => {
               const update = { ...question };
               update.options[i] = e.target.value;
-              handleChange(question.uuid, update);
+              handleChange(question._id, update);
             }}
             inputStyle="flex-grow text-xl my-2"
           />
@@ -21,7 +21,7 @@ export default function OptionsEditor({ question, handleChange, error }) {
             onClick={() => {
               const update = { ...question };
               update.options.splice(i, 1);
-              handleChange(question.uuid, update);
+              handleChange(question._id, update);
             }}
           >
             -
@@ -34,7 +34,7 @@ export default function OptionsEditor({ question, handleChange, error }) {
         onClick={() => {
           const update = { ...question };
           update.options.push("new option");
-          handleChange(question.uuid, update);
+          handleChange(question._id, update);
         }}
       >
         +

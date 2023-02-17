@@ -8,8 +8,7 @@ import QuestionEditor from "../components/editorTypes/questionEditor";
 import Input from "../components/common/input";
 import Joi from "joi";
 import surveyTypes from "../surveyTypes";
-import DraggableList from "../components/draggableList";
-import DraggableListItem from "../components/draggableListItem";
+import DraggableList from "../components/draggableList/draggableList";
 
 const schema = Joi.object({
   title: Joi.string().required().messages({
@@ -24,7 +23,7 @@ const schema = Joi.object({
       title: Joi.string().required().messages({
         "string.empty": '"Question title" is not allowed to be empty.',
       }),
-      uuid: Joi.string().required(),
+      _id: Joi.string().required(),
       isRequired: Joi.boolean().required(),
       type: Joi.string()
         .required()
@@ -97,38 +96,40 @@ const schema = Joi.object({
   ),
 });
 
+const tmpSurvey = {
+  title: "title",
+  description: "description",
+  showIndex: true,
+  questions: [
+    {
+      _id: uuid(),
+      title: "0",
+      type: "short answer",
+      isRequired: false,
+    },
+    {
+      _id: uuid(),
+      title: "2",
+      type: "short answer",
+      isRequired: false,
+    },
+    {
+      _id: uuid(),
+      title: "3",
+      type: "short answer",
+      isRequired: false,
+    },
+    {
+      _id: uuid(),
+      title: "4",
+      type: "short answer",
+      isRequired: false,
+    },
+  ],
+};
+
 export default function SurveyEditor() {
-  const [survey, setSurvey] = useState({
-    title: "title",
-    description: "description",
-    showIndex: true,
-    questions: [
-      {
-        title: "0",
-        type: "short answer",
-        uuid: uuid(),
-        isRequired: false,
-      },
-      {
-        title: "2",
-        type: "short answer",
-        uuid: uuid(),
-        isRequired: false,
-      },
-      {
-        title: "3",
-        type: "short answer",
-        uuid: uuid(),
-        isRequired: false,
-      },
-      {
-        title: "4",
-        type: "short answer",
-        uuid: uuid(),
-        isRequired: false,
-      },
-    ],
-  });
+  const [survey, setSurvey] = useState(tmpSurvey);
   const [selected, setSelected] = useState(null);
   const [errors, setErrors] = useState({});
 
@@ -140,8 +141,8 @@ export default function SurveyEditor() {
     if (error) {
       error.details.forEach((e) => {
         if (e.path[0] === "questions") {
-          newErrors[survey.questions[e.path[1]].uuid] = {
-            ...newErrors[survey.questions[e.path[1]].uuid],
+          newErrors[survey.questions[e.path[1]]._id] = {
+            ...newErrors[survey.questions[e.path[1]]._id],
             [e.path[2]]: e.message,
           };
         } else {
@@ -158,9 +159,9 @@ export default function SurveyEditor() {
     console.log(survey);
   };
 
-  const updateQuestions = (uuid, update) => {
+  const updateQuestions = (_id, update) => {
     const questions = [...survey.questions];
-    const i = questions.findIndex((q) => q.uuid === uuid);
+    const i = questions.findIndex((q) => q._id === _id);
     questions[i] = update;
 
     const newSurvey = { ...survey, questions };
@@ -214,18 +215,18 @@ export default function SurveyEditor() {
           itemComponent={(q, i) => (
             <ResizeablePanel
               className={`overflow-hidden rounded-xl my-8 transition bg-white sm:hover:shadow-[0px_0px_20px_2px_rgba(0,0,0,0.05)] ${
-                selected && selected === q.uuid
+                selected && selected === q._id
                   ? "shadow-[0px_0px_20px_2px_rgba(0,0,0,0.05)]"
                   : ""
               }`}
             >
               <div
                 className="p-8 cursor-pointer"
-                onClick={() => setSelected(q.uuid)}
+                onClick={() => setSelected(q._id)}
               >
                 <p
                   className={`mb-4 text-xl font-bold sm:text-2xl  ${
-                    Object.keys(errors).includes(q.uuid) ? "text-red-400" : ""
+                    Object.keys(errors).includes(q._id) ? "text-red-400" : ""
                   }`}
                 >
                   Question Preview
@@ -239,17 +240,17 @@ export default function SurveyEditor() {
                     handleChange={null}
                   />
                 </div>
-                {selected && selected === q.uuid && (
+                {selected && selected === q._id && (
                   <motion.div
                     className="overflow-hidden"
-                    key={`${q.uuid} editor`}
+                    key={`${q._id} editor`}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                   >
                     <QuestionEditor
                       question={q}
                       handleChange={updateQuestions}
-                      error={errors[q.uuid]}
+                      error={errors[q._id]}
                     />
                   </motion.div>
                 )}
@@ -263,7 +264,7 @@ export default function SurveyEditor() {
             className="flex-grow p-4 mx-8 text-2xl text-white transition-colors border rounded-xl bg-emerald-500 hover:bg-emerald-400 disabled:bg-neutral-400"
             type="submit"
             onClick={handleSubmit}
-            // disabled={Object.keys(errors).length !== 0}
+            disabled={Object.keys(errors).length !== 0}
           >
             Submit
           </button>

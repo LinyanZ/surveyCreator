@@ -1,5 +1,5 @@
 export default function DropDownListQuestion({ question, handleChange }) {
-  const { options, uuid } = question;
+  const { options, _id } = question;
 
   return (
     <select
@@ -11,7 +11,7 @@ export default function DropDownListQuestion({ question, handleChange }) {
         Select your option
       </option>
       {options.map((o, i) => (
-        <option key={`${uuid} ${o} ${i}`} value={o}>
+        <option key={`${_id} ${o} ${i}`} value={o}>
           {o}
         </option>
       ))}

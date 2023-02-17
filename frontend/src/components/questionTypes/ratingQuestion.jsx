@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 export default function RatingQuestion({ question, handleChange }) {
-  const { minLabel, maxLabel, uuid } = question;
+  const { minLabel, maxLabel, _id } = question;
   const [ratings, setRatings] = useState([]);
   const [selectedRating, setSelectedRating] = useState(null);
 
@@ -31,7 +31,7 @@ export default function RatingQuestion({ question, handleChange }) {
           className={`w-10 h-10 ${
             selectedRating === r ? "bg-emerald-500 text-white" : ""
           }`}
-          key={`${uuid} ${r}`}
+          key={`${_id} ${r}`}
           type="button"
           onClick={() => {
             handleChange && handleChange(question, r);

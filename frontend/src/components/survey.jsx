@@ -8,12 +8,12 @@ export default function Survey({ survey }) {
   const [errors, setErrors] = useState({});
 
   const handleChange = (question, value) => {
-    const newSubmission = submission.filter((s) => s.uuid !== question.uuid);
+    const newSubmission = submission.filter((s) => s._id !== question._id);
     newSubmission.push({
-      uuid: question.uuid,
+      _id: question._id,
       answer: value,
     });
-    validate(newSubmission, question.uuid);
+    validate(newSubmission, question._id);
     setSubmission(newSubmission);
   };
 
@@ -24,19 +24,18 @@ export default function Survey({ survey }) {
   );
 
   // check if the answer is empty when a question is marked as required
-  const validate = (s, uuid = null) => {
+  const validate = (s, _id = null) => {
     const newErrors = { ...errors };
 
     for (const question of survey.questions) {
-      if (question.isRequired && (!uuid || uuid === question.uuid)) {
-        const answer = s.find((q) => q.uuid === question.uuid)?.answer;
+      if (question.isRequired && (!_id || _id === question._id)) {
+        const answer = s.find((q) => q._id === question._id)?.answer;
         const { error } = answerSchema.validate(answer);
 
         if (!answer || error) {
-          newErrors[question.uuid] =
-            "This question is required to be answered.";
+          newErrors[question._id] = "This question is required to be answered.";
         } else {
-          delete newErrors[question.uuid];
+          delete newErrors[question._id];
         }
       }
     }
@@ -59,13 +58,13 @@ export default function Survey({ survey }) {
       <div className="h-[1px] w-full bg-neutral-200 my-8" />
       {survey.questions.map((q, index) => (
         <Question
-          key={q.uuid}
+          key={q._id}
           className="w-full my-8"
           question={q}
           index={index + 1}
           showIndex={survey.showIndex}
           handleChange={handleChange}
-          error={errors[q.uuid]}
+          error={errors[q._id]}
         />
       ))}
       <button

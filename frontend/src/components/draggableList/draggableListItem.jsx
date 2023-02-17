@@ -2,7 +2,7 @@ import React from "react";
 import { motion, useMotionValue } from "framer-motion";
 
 const DraggableListItem = React.forwardRef(
-  ({ index, moveItem, children }, ref) => {
+  ({ index, reorderItem, children }, ref) => {
     const zIndex = useMotionValue(0);
 
     return (
@@ -20,7 +20,7 @@ const DraggableListItem = React.forwardRef(
         }}
         dragSnapToOrigin
         dragElastic={1}
-        onDrag={(e, info) => moveItem(info.point.y, index)}
+        onDrag={(e, info) => reorderItem(info.point.y, index)}
         style={{ zIndex }}
       >
         {children}

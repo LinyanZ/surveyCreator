@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 export default function MultipleChoicesQuestion({ question, handleChange }) {
-  const { options, uuid } = question;
+  const { options, _id } = question;
   const [checkedOptions, setCheckedOptions] = useState(
     new Array(options.length).fill(false)
   );
@@ -10,15 +10,15 @@ export default function MultipleChoicesQuestion({ question, handleChange }) {
     <>
       {options.map((option, index) => (
         <div
-          key={`${uuid} ${option} ${index}`}
+          key={`${_id} ${option} ${index}`}
           className="block py-1 text-xl sm:text-2xl"
         >
           <input
             className="mr-2"
             type="checkbox"
-            id={`${uuid} ${option}`}
-            name={uuid}
-            value={`${uuid} ${option}`}
+            id={`${_id} ${option}`}
+            name={_id}
+            value={`${_id} ${option}`}
             onChange={(e) => {
               if (handleChange) {
                 const newCheckedOption = [...checkedOptions];
@@ -32,7 +32,7 @@ export default function MultipleChoicesQuestion({ question, handleChange }) {
               }
             }}
           />
-          <label htmlFor={`${uuid} ${option}`}>{option}</label>
+          <label htmlFor={`${_id} ${option}`}>{option}</label>
         </div>
       ))}
     </>

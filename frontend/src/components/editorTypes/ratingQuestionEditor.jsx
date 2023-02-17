@@ -22,7 +22,7 @@ export default function RatingQuestionEditor({
         labelStyle={labelStyle}
         value={question.minLabel}
         onChange={(e) => {
-          handleChange(question.uuid, {
+          handleChange(question._id, {
             ...question,
             minLabel: e.target.value,
           });
@@ -38,7 +38,7 @@ export default function RatingQuestionEditor({
         labelStyle={labelStyle}
         value={question.maxLabel}
         onChange={(e) => {
-          handleChange(question.uuid, {
+          handleChange(question._id, {
             ...question,
             maxLabel: e.target.value,
           });
@@ -54,7 +54,7 @@ export default function RatingQuestionEditor({
         labelStyle={labelStyle}
         value={question.min}
         onChange={(e) => {
-          handleChange(question.uuid, {
+          handleChange(question._id, {
             ...question,
             min: Number(e.target.value),
           });
@@ -70,7 +70,7 @@ export default function RatingQuestionEditor({
         labelStyle={labelStyle}
         value={question.max}
         onChange={(e) => {
-          handleChange(question.uuid, {
+          handleChange(question._id, {
             ...question,
             max: Number(e.target.value),
           });
@@ -86,7 +86,7 @@ export default function RatingQuestionEditor({
         labelStyle={labelStyle}
         value={question.step}
         onChange={(e) => {
-          handleChange(question.uuid, {
+          handleChange(question._id, {
             ...question,
             step: Number(e.target.value),
           });

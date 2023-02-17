@@ -20,20 +20,20 @@ export default function DraggableList({ items, setItems, itemComponent }) {
       if (current === 0) return 0;
       const prevPosition = positions[current - 1];
       const prevCenter = prevPosition.top + prevPosition.height / 2;
-      console.log(currentCenter, mouseY, prevCenter);
+
       if (mouseY < prevCenter) return current - 1;
     } else {
       if (current === n - 1) return n - 1;
       const nextPosition = positions[current + 1];
       const nextCenter = nextPosition.top + nextPosition.height / 2;
-      console.log(currentCenter, mouseY, nextCenter);
+
       if (mouseY > nextCenter) return current + 1;
     }
 
     return current;
   };
 
-  const move = (items, fromIndex, toIndex) => {
+  const reorder = (items, fromIndex, toIndex) => {
     const newItems = [...items];
     const itemToMove = newItems[fromIndex];
     newItems.splice(fromIndex, 1);
@@ -49,7 +49,7 @@ export default function DraggableList({ items, setItems, itemComponent }) {
   // Find the ideal index for a dragging item based on its position in the array, and its
   // current drag offset. If it's different to its current index, we swap this item with that
   // sibling.
-  const moveItem = (mouseY, current) => {
+  const reorderItem = (mouseY, current) => {
     // update position information of all children
     for (let j = 0; j < positions.length; j++) {
       setPosition(j, {
@@ -60,16 +60,16 @@ export default function DraggableList({ items, setItems, itemComponent }) {
     }
 
     const targetIndex = findIndex(mouseY, current);
-    if (targetIndex !== current) setItems(move(items, current, targetIndex));
+    if (targetIndex !== current) setItems(reorder(items, current, targetIndex));
   };
 
   return (
     <ul className="list-none">
       {items.map((item, index) => (
         <DraggableListItem
-          key={item.uuid}
+          key={item._id}
           index={index}
-          moveItem={moveItem}
+          reorderItem={reorderItem}
           ref={(ref) => (refs[index] = ref)}
         >
           {itemComponent(item, index)}
