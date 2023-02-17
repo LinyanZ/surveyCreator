@@ -2,7 +2,7 @@ import Input from "../common/input";
 
 const inputStyle =
   "flex text-xl gap-x-8 my-2 flex-wrap w-full py-2 focus:outline-none border-b-2 border-neutral-300 focus:border-neutral-600";
-const errorStyle = "text-red text-red-500";
+const errorStyle = "text-lg sm:text-xl text-red my-2 text-red-500";
 const labelStyle = "text-xl font-bold";
 
 export default function RatingQuestionEditor({
@@ -10,14 +10,6 @@ export default function RatingQuestionEditor({
   handleChange,
   error,
 }) {
-  const {
-    minLabel: minLabelError,
-    maxLabel: maxLabelError,
-    min: minError,
-    max: maxError,
-    step: stepError,
-  } = error || {};
-
   return (
     <div className="mt-4">
       <Input
@@ -25,6 +17,7 @@ export default function RatingQuestionEditor({
         label="Min Label"
         type="text"
         inputStyle={inputStyle}
+        error={error?.minLabel}
         errorStyle={errorStyle}
         labelStyle={labelStyle}
         value={question.minLabel}
@@ -35,16 +28,12 @@ export default function RatingQuestionEditor({
           });
         }}
       />
-      {minLabelError && (
-        <p className="text-lg sm:text-xl text-red my-2 text-red-500">
-          Min label is not allowed to be empty.
-        </p>
-      )}
       <Input
         name="maxLabel"
         label="Max Label"
         type="text"
         inputStyle={inputStyle}
+        error={error?.maxLabel}
         errorStyle={errorStyle}
         labelStyle={labelStyle}
         value={question.maxLabel}
@@ -55,16 +44,12 @@ export default function RatingQuestionEditor({
           });
         }}
       />
-      {maxLabelError && (
-        <p className="text-lg sm:text-xl text-red my-2 text-red-500">
-          Max label is not allowed to be empty.
-        </p>
-      )}
       <Input
         name="min"
         label="Min Value"
         type="number"
         inputStyle={inputStyle}
+        error={error?.min}
         errorStyle={errorStyle}
         labelStyle={labelStyle}
         value={question.min}
@@ -75,16 +60,12 @@ export default function RatingQuestionEditor({
           });
         }}
       />
-      {minError && (
-        <p className="text-lg sm:text-xl text-red my-2 text-red-500">
-          Min value should be less than the Max value.
-        </p>
-      )}
       <Input
         name="max"
         label="Max Value"
         type="number"
         inputStyle={inputStyle}
+        error={error?.max}
         errorStyle={errorStyle}
         labelStyle={labelStyle}
         value={question.max}
@@ -95,16 +76,12 @@ export default function RatingQuestionEditor({
           });
         }}
       />
-      {maxError && (
-        <p className="text-lg sm:text-xl text-red my-2 text-red-500">
-          Min value should be less than the Max value.
-        </p>
-      )}
       <Input
         name="step"
         label="Step Value"
         type="number"
         inputStyle={inputStyle}
+        error={error?.step}
         errorStyle={errorStyle}
         labelStyle={labelStyle}
         value={question.step}
@@ -115,11 +92,6 @@ export default function RatingQuestionEditor({
           });
         }}
       />
-      {stepError && (
-        <p className="text-lg sm:text-xl text-red my-2 text-red-500">
-          Step value can not be 0.
-        </p>
-      )}
     </div>
   );
 }

@@ -39,9 +39,9 @@ export default function OptionsEditor({ question, handleChange, error }) {
       >
         +
       </button>
-      {error && error.options && (
+      {error?.options && (
         <p className="text-lg sm:text-xl text-red my-2 text-red-500">
-          This question should contain at least one option.
+          {error.options}
         </p>
       )}
     </div>

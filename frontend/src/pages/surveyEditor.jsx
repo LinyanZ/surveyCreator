@@ -9,6 +9,92 @@ import Input from "../components/common/input";
 import Joi from "joi";
 import surveyTypes from "../surveyTypes";
 
+const schema = Joi.object({
+  title: Joi.string().required().messages({
+    "string.empty": '"Survey title" is not allowed to be empty.',
+  }),
+  description: Joi.string().optional().messages({
+    "string.empty": '"Survey description" is not allowed to be empty.',
+  }),
+  showIndex: Joi.boolean().required(),
+  questions: Joi.array().items(
+    Joi.object({
+      title: Joi.string().required().messages({
+        "string.empty": '"Question title" is not allowed to be empty.',
+      }),
+      uuid: Joi.string().required(),
+      isRequired: Joi.boolean().optional(),
+      type: Joi.string()
+        .required()
+        .valid(...surveyTypes.map((s) => s.type)),
+      options: Joi.when("type", {
+        is: Joi.valid(surveyTypes[0].type, surveyTypes[4].type),
+        then: Joi.forbidden(),
+        otherwise: Joi.array()
+          .items(
+            Joi.string().required().messages({
+              "string.empty": '"Option" is not allowed to be empty.',
+            })
+          )
+          .required()
+          .messages({
+            "array.includesRequiredUnknowns":
+              "This question should contain at least one option.",
+          }),
+      }),
+      minLabel: Joi.when("type", {
+        is: Joi.valid(surveyTypes[4].type),
+        then: Joi.string().required().messages({
+          "string.empty": '"Min label" is not allowed to be empty.',
+        }),
+        otherwise: Joi.forbidden(),
+      }),
+      maxLabel: Joi.when("type", {
+        is: Joi.valid(surveyTypes[4].type),
+        then: Joi.string().required().messages({
+          "string.empty": '"Max label" is not allowed to be empty.',
+        }),
+        otherwise: Joi.forbidden(),
+      }),
+      min: Joi.when("type", {
+        is: Joi.valid(surveyTypes[4].type),
+        then: Joi.number()
+          .required()
+          .when("step", {
+            is: Joi.number().positive(),
+            then: Joi.number().less(Joi.ref("max")),
+            otherwise: Joi.when("step", {
+              is: Joi.number().negative(),
+              then: Joi.number().greater(Joi.ref("max")),
+            }),
+          })
+          .messages({
+            "string.empty": '"Min" is required.',
+            "number.less":
+              '"Min" should be smaller than "Max" for a positive "Step" value',
+            "number.greater":
+              '"Min" should be greater than "Max" for a negative "Step" value',
+          }),
+        otherwise: Joi.forbidden(),
+      }),
+      max: Joi.when("type", {
+        is: Joi.valid(surveyTypes[4].type),
+        then: Joi.number().required(),
+        otherwise: Joi.forbidden(),
+      }).messages({
+        "string.empty": '"Max" is required.',
+      }),
+      step: Joi.when("type", {
+        is: Joi.valid(surveyTypes[4].type),
+        then: Joi.number().required().invalid(0),
+        otherwise: Joi.forbidden(),
+      }).messages({
+        "any.invalid": '"Step" value can not be 0.',
+      }),
+    })
+  ),
+});
+
 export default function SurveyEditor() {
   const [survey, setSurvey] = useState({
     title: "",
@@ -46,7 +132,9 @@ export default function SurveyEditor() {
     if (error) {
       error.details.forEach((e) => {
         if (e.path[0] === "questions") {
+          console.log(e);
           newErrors[survey.questions[e.path[1]].uuid] = {
+            ...newErrors[survey.questions[e.path[1]].uuid],
             [e.path[2]]: e.message,
           };
         } else {
@@ -62,58 +150,6 @@ export default function SurveyEditor() {
     e.preventDefault();
     console.log(survey);
   };
-
-  const schema = Joi.object({
-    title: Joi.string().required(),
-    description: Joi.string().optional(),
-    showIndex: Joi.boolean().required(),
-    questions: Joi.array().items(
-      Joi.object({
-        title: Joi.string().required(),
-        uuid: Joi.string().required(),
-        isRequired: Joi.boolean().optional(),
-        type: Joi.string()
-          .required()
-          .valid(...surveyTypes.map((s) => s.type)),
-        options: Joi.when("type", {
-          is: Joi.valid(surveyTypes[0].type, surveyTypes[4].type),
-          then: Joi.forbidden(),
-          otherwise: Joi.array().items(Joi.string().required()).required(),
-        }),
-        minLabel: Joi.when("type", {
-          is: Joi.valid(surveyTypes[4].type),
-          then: Joi.string().required(),
-          otherwise: Joi.forbidden(),
-        }),
-        maxLabel: Joi.when("type", {
-          is: Joi.valid(surveyTypes[4].type),
-          then: Joi.string().required(),
-          otherwise: Joi.forbidden(),
-        }),
-        min: Joi.when("type", {
-          is: Joi.valid(surveyTypes[4].type),
-          then: Joi.number()
-            .required()
-            .when("step", {
-              is: Joi.number().positive(),
-              then: Joi.number().less(Joi.ref("max")),
-              otherwise: Joi.number().greater(Joi.ref("max")),
-            }),
-          otherwise: Joi.forbidden(),
-        }),
-        max: Joi.when("type", {
-          is: Joi.valid(surveyTypes[4].type),
-          then: Joi.number().required(),
-          otherwise: Joi.forbidden(),
-        }),
-        step: Joi.when("type", {
-          is: Joi.valid(surveyTypes[4].type),
-          then: Joi.number().required().invalid(0),
-          otherwise: Joi.forbidden(),
-        }),
-      })
-    ),
-  });
 
   const updateQuestions = (uuid, update) => {
     const questions = [...survey.questions];

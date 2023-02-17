@@ -31,6 +31,28 @@ export default function QuestionEditor({ question, handleChange, error }) {
     }
   };
 
+  const switchType = (e) => {
+    const defaultQuestion = surveyTypes.find(
+      (t) => t.type === e.target.value
+    ).default;
+
+    // spread the default values and other question properties
+    const update = {
+      // deep copy the default object
+      ...JSON.parse(JSON.stringify(defaultQuestion)),
+      type: e.target.value,
+      title: question.title,
+      uuid: question.uuid,
+      isRequired: question.isRequired,
+    };
+
+    // keep the added options if possible
+    if (question.options && update.options)
+      update.options = [...question.options];
+
+    handleChange(uuid, update);
+  };
+
   return (
     <div className="w-full">
       <p className="my-4 text-xl font-bold sm:text-2xl">Properties</p>
@@ -46,40 +68,21 @@ export default function QuestionEditor({ question, handleChange, error }) {
             title: e.target.value,
           });
         }}
-        error={
-          error && error.title && "Question title is not allowed to be empty."
-        }
+        error={error?.title}
         errorStyle="text-lg sm:text-xl text-red my-2 text-red-500"
       />
-      <div className="flex flex-wrap py-2 mt-4 text-lg sm:text-xl gap-x-8">
-        <label className="min-w-[200px] font-bold" htmlFor={`${uuid}.type`}>
+      <div className="flex flex-wrap py-2 text-lg sm:text-xl gap-x-8">
+        <label
+          className="min-w-[200px] my-2 font-bold"
+          htmlFor={`${uuid}.type`}
+        >
           Question Type
         </label>
         <select
-          className="flex-grow max-w-full"
+          className="flex-grow my-2 max-w-full"
           name={`${uuid}.title`}
           defaultValue="short answer"
-          onChange={(e) => {
-            const defaultQuestion = surveyTypes.find(
-              (t) => t.type === e.target.value
-            ).default;
-
-            // spread the default values and other question properties
-            const update = {
-              // deep copy the default object
-              ...JSON.parse(JSON.stringify(defaultQuestion)),
-              type: e.target.value,
-              title: question.title,
-              uuid: question.uuid,
-              isRequired: question.isRequired,
-            };
-
-            // keep the added options if possible
-            if (question.options && update.options)
-              update.options = [...question.options];
-
-            handleChange(uuid, update);
-          }}
+          onChange={switchType}
         >
           {surveyTypes.map((t) => (
             <option
