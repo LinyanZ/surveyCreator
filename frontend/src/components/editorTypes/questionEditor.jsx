@@ -95,6 +95,20 @@ export default function QuestionEditor({ question, handleChange, error }) {
           ))}
         </select>
       </div>
+      <Input
+        name="required"
+        label="Mark as required"
+        type="checkbox"
+        labelStyle="text-lg sm:text-xl mr-4"
+        value={question.isRequired}
+        onChange={() => {
+          handleChange(uuid, {
+            ...question,
+            isRequired: !question.isRequired,
+          });
+        }}
+      />
+
       {editorTypeSwitch(type)}
     </div>
   );

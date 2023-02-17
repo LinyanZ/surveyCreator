@@ -23,7 +23,7 @@ const schema = Joi.object({
         "string.empty": '"Question title" is not allowed to be empty.',
       }),
       uuid: Joi.string().required(),
-      isRequired: Joi.boolean().optional(),
+      isRequired: Joi.boolean().required(),
       type: Joi.string()
         .required()
         .valid(...surveyTypes.map((s) => s.type)),
@@ -132,7 +132,6 @@ export default function SurveyEditor() {
     if (error) {
       error.details.forEach((e) => {
         if (e.path[0] === "questions") {
-          console.log(e);
           newErrors[survey.questions[e.path[1]].uuid] = {
             ...newErrors[survey.questions[e.path[1]].uuid],
             [e.path[2]]: e.message,

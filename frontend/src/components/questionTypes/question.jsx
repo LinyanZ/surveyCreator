@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ShortAnswerQuestion from "./shortAnswerQuestion";
 import SingleChoiceQuestion from "./singleChoiceQuestion";
 import MultipleChoicesQuestion from "./multipleChoicesQuestion";
@@ -15,7 +15,17 @@ export default function Question({
   handleChange,
   ...props
 }) {
-  const { title } = question;
+  const [title, setTitle] = useState();
+
+  useEffect(() => {
+    let formattedTitle = "";
+    if (showIndex) formattedTitle += `${index}. `;
+
+    formattedTitle += question.title ? question.title : "Empty Question Title";
+
+    if (question.isRequired) formattedTitle += "*";
+    setTitle(formattedTitle);
+  }, [question]);
 
   const questionTypeSwitch = () => {
     let component;
@@ -42,20 +52,12 @@ export default function Question({
     });
   };
 
-  const generateTitle = () => {
-    let formattedTitle = "";
-    if (showIndex) formattedTitle += `${index}. `;
-
-    formattedTitle += title ? title : "Empty Question Title";
-
-    if (question.isRequired) formattedTitle += "*";
-    return formattedTitle;
-  };
+  const generateTitle = () => {};
 
   return (
     <div {...props}>
       <h3 className="w-full py-2 mt-2 text-xl font-bold sm:text-2xl">
-        {generateTitle()}
+        {title}
       </h3>
       {questionTypeSwitch()}
       {error && <p className="mt-2 text-red-500 text-red">{error}</p>}
