@@ -34,7 +34,7 @@ const schema = Joi.object({
           then: Joi.forbidden(),
           otherwise: Joi.array()
             .items(
-              Joi.string().required().messages({
+              Joi.string().messages({
                 "string.empty": '"Option" is not allowed to be empty.',
               })
             )
@@ -139,7 +139,7 @@ const AddButton = ({ addQuestion }) => {
     <button
       type="button"
       onClick={addQuestion}
-      className="my-16 block mx-auto w-16 h-16 rounded-xl text-2xl bg-emerald-500 text-white"
+      className="my-16 block mx-auto w-16 h-16 rounded-xl text-2xl bg-emerald-500 text-white transition hover:bg-emerald-400"
     >
       +
     </button>
@@ -151,7 +151,7 @@ const RemoveButton = ({ removeQuestion }) => {
     <div className="flex w-full justify-end">
       <button
         type="button"
-        className="bg-red-500 text-white px-4 py-2 rounded-lg mt-4"
+        className="bg-red-500 text-white px-4 py-2 rounded-lg mt-8 transition hover:bg-red-400"
         onClick={removeQuestion}
       >
         Remove

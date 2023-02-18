@@ -52,15 +52,13 @@ export default function Question({
     });
   };
 
-  const generateTitle = () => {};
-
   return (
     <div {...props}>
       <h3 className="w-full py-2 mt-2 text-xl font-bold sm:text-2xl">
         {title}
       </h3>
       {questionTypeSwitch()}
-      {error && <p className="mt-2 text-red-500 text-red">{error}</p>}
+      {error && <p className="mt-2 text-red-500 text-red text-xl">{error}</p>}
     </div>
   );
 }
