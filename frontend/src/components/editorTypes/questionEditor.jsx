@@ -78,7 +78,7 @@ export default function QuestionEditor({ question, handleChange, error }) {
         <select
           className="flex-grow my-2 max-w-full"
           name={`${_id}.title`}
-          defaultValue="short answer"
+          defaultValue={question.type}
           onChange={switchType}
         >
           {surveyTypes.map((t) => (

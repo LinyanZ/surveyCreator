@@ -18,114 +18,161 @@ const schema = Joi.object({
     "string.empty": '"Survey description" is not allowed to be empty.',
   }),
   showIndex: Joi.boolean().required(),
-  questions: Joi.array().items(
-    Joi.object({
-      title: Joi.string().required().messages({
-        "string.empty": '"Question title" is not allowed to be empty.',
-      }),
-      _id: Joi.string().required(),
-      isRequired: Joi.boolean().required(),
-      type: Joi.string()
-        .required()
-        .valid(...surveyTypes.map((s) => s.type)),
-      options: Joi.when("type", {
-        is: Joi.valid(surveyTypes[0].type, surveyTypes[4].type),
-        then: Joi.forbidden(),
-        otherwise: Joi.array()
-          .items(
-            Joi.string().required().messages({
-              "string.empty": '"Option" is not allowed to be empty.',
-            })
-          )
-          .required()
-          .messages({
-            "array.includesRequiredUnknowns":
-              "This question should contain at least one option.",
-          }),
-      }),
-      minLabel: Joi.when("type", {
-        is: Joi.valid(surveyTypes[4].type),
-        then: Joi.string().required().messages({
-          "string.empty": '"Min label" is not allowed to be empty.',
+  questions: Joi.array()
+    .items(
+      Joi.object({
+        title: Joi.string().required().messages({
+          "string.empty": '"Question title" is not allowed to be empty.',
         }),
-        otherwise: Joi.forbidden(),
-      }),
-      maxLabel: Joi.when("type", {
-        is: Joi.valid(surveyTypes[4].type),
-        then: Joi.string().required().messages({
-          "string.empty": '"Max label" is not allowed to be empty.',
-        }),
-        otherwise: Joi.forbidden(),
-      }),
-      min: Joi.when("type", {
-        is: Joi.valid(surveyTypes[4].type),
-        then: Joi.number()
+        _id: Joi.string().required(),
+        isRequired: Joi.boolean().required(),
+        type: Joi.string()
           .required()
-          .when("step", {
-            is: Joi.number().positive(),
-            then: Joi.number().less(Joi.ref("max")),
-            otherwise: Joi.when("step", {
-              is: Joi.number().negative(),
-              then: Joi.number().greater(Joi.ref("max")),
+          .valid(...surveyTypes.map((s) => s.type)),
+        options: Joi.when("type", {
+          is: Joi.valid(surveyTypes[0].type, surveyTypes[4].type),
+          then: Joi.forbidden(),
+          otherwise: Joi.array()
+            .items(
+              Joi.string().required().messages({
+                "string.empty": '"Option" is not allowed to be empty.',
+              })
+            )
+            .required()
+            .min(1)
+            .messages({
+              "array.min": "This question should contain at least one option.",
             }),
-          })
-          .messages({
-            "string.empty": '"Min" is required.',
-            "number.less":
-              '"Min" should be smaller than "Max" for a positive "Step" value',
-            "number.greater":
-              '"Min" should be greater than "Max" for a negative "Step" value',
+        }),
+        minLabel: Joi.when("type", {
+          is: Joi.valid(surveyTypes[4].type),
+          then: Joi.string().required().messages({
+            "string.empty": '"Min label" is not allowed to be empty.',
           }),
-        otherwise: Joi.forbidden(),
-      }),
-      max: Joi.when("type", {
-        is: Joi.valid(surveyTypes[4].type),
-        then: Joi.number().required(),
-        otherwise: Joi.forbidden(),
-      }).messages({
-        "string.empty": '"Max" is required.',
-      }),
-      step: Joi.when("type", {
-        is: Joi.valid(surveyTypes[4].type),
-        then: Joi.number().required().invalid(0),
-        otherwise: Joi.forbidden(),
-      }).messages({
-        "any.invalid": '"Step" value can not be 0.',
-      }),
-    })
-  ),
+          otherwise: Joi.forbidden(),
+        }),
+        maxLabel: Joi.when("type", {
+          is: Joi.valid(surveyTypes[4].type),
+          then: Joi.string().required().messages({
+            "string.empty": '"Max label" is not allowed to be empty.',
+          }),
+          otherwise: Joi.forbidden(),
+        }),
+        min: Joi.when("type", {
+          is: Joi.valid(surveyTypes[4].type),
+          then: Joi.number()
+            .required()
+            .when("step", {
+              is: Joi.number().positive(),
+              then: Joi.number().less(Joi.ref("max")),
+              otherwise: Joi.when("step", {
+                is: Joi.number().negative(),
+                then: Joi.number().greater(Joi.ref("max")),
+              }),
+            })
+            .messages({
+              "string.empty": '"Min" is required.',
+              "number.less":
+                '"Min" should be smaller than "Max" for a positive "Step" value',
+              "number.greater":
+                '"Min" should be greater than "Max" for a negative "Step" value',
+            }),
+          otherwise: Joi.forbidden(),
+        }),
+        max: Joi.when("type", {
+          is: Joi.valid(surveyTypes[4].type),
+          then: Joi.number().required(),
+          otherwise: Joi.forbidden(),
+        }).messages({
+          "string.empty": '"Max" is required.',
+        }),
+        step: Joi.when("type", {
+          is: Joi.valid(surveyTypes[4].type),
+          then: Joi.number().required().invalid(0),
+          otherwise: Joi.forbidden(),
+        }).messages({
+          "any.invalid": '"Step" value can not be 0.',
+        }),
+      })
+    )
+    .required()
+    .min(1)
+    .messages({
+      "array.min": "This survey should contain at least one question.",
+    }),
 });
 
 const tmpSurvey = {
-  title: "title",
-  description: "description",
+  title: "",
+  description: "",
   showIndex: true,
   questions: [
-    {
-      _id: uuid(),
-      title: "0",
-      type: "short answer",
-      isRequired: false,
-    },
-    {
-      _id: uuid(),
-      title: "2",
-      type: "short answer",
-      isRequired: false,
-    },
-    {
-      _id: uuid(),
-      title: "3",
-      type: "short answer",
-      isRequired: false,
-    },
-    {
-      _id: uuid(),
-      title: "4",
-      type: "short answer",
-      isRequired: false,
-    },
+    // {
+    //   _id: uuid(),
+    //   title: "0",
+    //   type: "short answer",
+    //   isRequired: false,
+    // },
+    // {
+    //   _id: uuid(),
+    //   title: "2",
+    //   type: "short answer",
+    //   isRequired: false,
+    // },
+    // {
+    //   _id: uuid(),
+    //   title: "3",
+    //   type: "short answer",
+    //   isRequired: false,
+    // },
+    // {
+    //   _id: uuid(),
+    //   title: "4",
+    //   type: "short answer",
+    //   isRequired: false,
+    // },
   ],
+};
+
+const AddButton = ({ addQuestion }) => {
+  return (
+    <button
+      type="button"
+      onClick={addQuestion}
+      className="my-16 block mx-auto w-16 h-16 rounded-xl text-2xl bg-emerald-500 text-white"
+    >
+      +
+    </button>
+  );
+};
+
+const RemoveButton = ({ removeQuestion }) => {
+  return (
+    <div className="flex w-full justify-end">
+      <button
+        type="button"
+        className="bg-red-500 text-white px-4 py-2 rounded-lg mt-4"
+        onClick={removeQuestion}
+      >
+        Remove
+      </button>
+    </div>
+  );
+};
+
+const SubmitButton = ({ handleSubmit, disabled }) => {
+  return (
+    <div className="flex w-full">
+      <button
+        className="flex-grow p-4 mx-8 text-2xl text-white transition-colors border rounded-xl bg-emerald-500 hover:bg-emerald-400 disabled:bg-neutral-400"
+        type="submit"
+        onClick={handleSubmit}
+        disabled={disabled}
+      >
+        Submit
+      </button>
+    </div>
+  );
 };
 
 export default function SurveyEditor() {
@@ -133,16 +180,17 @@ export default function SurveyEditor() {
   const [selected, setSelected] = useState(null);
   const [errors, setErrors] = useState({});
 
-  const validate = (obj, schema) => {
+  const validate = (newSurvey) => {
     const newErrors = {};
 
     const options = { abortEarly: false };
-    const { error } = schema.validate(obj, options);
+    const { error } = schema.validate(newSurvey, options);
     if (error) {
       error.details.forEach((e) => {
-        if (e.path[0] === "questions") {
-          newErrors[survey.questions[e.path[1]]._id] = {
-            ...newErrors[survey.questions[e.path[1]]._id],
+        if (e.path[0] === "questions" && e.path[1] !== undefined) {
+          // update errors for each individual question
+          newErrors[newSurvey.questions[e.path[1]]._id] = {
+            ...newErrors[newSurvey.questions[e.path[1]]._id],
             [e.path[2]]: e.message,
           };
         } else {
@@ -156,7 +204,10 @@ export default function SurveyEditor() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(survey);
+
+    const newErrors = validate(survey);
+    setErrors(newErrors);
+    if (Object.keys(newErrors).length === 0) console.log(survey);
   };
 
   const updateQuestions = (_id, update) => {
@@ -165,7 +216,27 @@ export default function SurveyEditor() {
     questions[i] = update;
 
     const newSurvey = { ...survey, questions };
-    setErrors(validate(newSurvey, schema));
+    setErrors(validate(newSurvey));
+    setSurvey(newSurvey);
+  };
+
+  const addQuestion = () => {
+    const newSurvey = { ...survey };
+    newSurvey.questions.push({
+      ...surveyTypes[0].default,
+      type: surveyTypes[0].type,
+      title: "",
+      isRequired: false,
+      _id: uuid(),
+    });
+    setErrors(validate(newSurvey));
+    setSurvey(newSurvey);
+  };
+
+  const removeQuestion = (_id) => {
+    const newSurvey = { ...survey };
+    newSurvey.questions = newSurvey.questions.filter((q) => q._id !== _id);
+    setErrors(validate(newSurvey));
     setSurvey(newSurvey);
   };
 
@@ -182,7 +253,7 @@ export default function SurveyEditor() {
             value={survey.title}
             onChange={(e) => {
               const newSurvey = { ...survey, title: e.target.value };
-              setErrors(validate(newSurvey, schema));
+              setErrors(validate(newSurvey));
               setSurvey(newSurvey);
             }}
             error={errors.title}
@@ -197,7 +268,7 @@ export default function SurveyEditor() {
             value={survey.description}
             onChange={(e) => {
               const newSurvey = { ...survey, description: e.target.value };
-              setErrors(validate(newSurvey, schema));
+              setErrors(validate(newSurvey));
               setSurvey(newSurvey);
             }}
             error={errors.description}
@@ -254,21 +325,21 @@ export default function SurveyEditor() {
                     />
                   </motion.div>
                 )}
+                <RemoveButton removeQuestion={() => removeQuestion(q._id)} />
               </div>
             </ResizeablePanel>
           )}
         ></DraggableList>
-
-        <div className="flex w-full">
-          <button
-            className="flex-grow p-4 mx-8 text-2xl text-white transition-colors border rounded-xl bg-emerald-500 hover:bg-emerald-400 disabled:bg-neutral-400"
-            type="submit"
-            onClick={handleSubmit}
-            disabled={Object.keys(errors).length !== 0}
-          >
-            Submit
-          </button>
-        </div>
+        {survey.questions.length === 0 && (
+          <p className="text-3xl font-bold text-neutral-500 my-16 mx-auto w-fit">
+            Add your first question here.
+          </p>
+        )}
+        <AddButton addQuestion={addQuestion} />
+        <SubmitButton
+          handleSubmit={handleSubmit}
+          disabled={Object.keys(errors).length !== 0}
+        />
       </form>
     </div>
   );

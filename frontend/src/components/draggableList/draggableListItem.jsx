@@ -10,7 +10,7 @@ const DraggableListItem = React.forwardRef(
         ref={ref}
         layout
         className="draggable list-none relative z-0"
-        whileTap={{ scale: 1.03 }}
+        // whileTap={{ scale: 1.03 }}
         drag="y"
         onDragStart={() => {
           zIndex.set(100);
