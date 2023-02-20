@@ -1,19 +1,14 @@
-// require("dotenv").config();
+require("dotenv").config(); // config environment variables
+const logger = require("./start/logger"); // custom logger
+
 const express = require("express");
 const app = express();
 
-// require("./start/cors")(app);
-// require("./routes/routes")(app);
+require("./start/logging")(); // catch errors and log to file
+require("./start/prod")(app); // optimization for the production environment
+require("./start/cors")(app); // config CORS settings
+require("./start/db")(); // config database connection
+require("./start/routes")(app); // config api routes
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-app.get("/", (req, res) => res.send("HOMEPAGE!!"));
-app.all("*", (req, res) => res.status(404).send("NOT FOUND"));
-
-const port = process.env.SERVER_PORT || 3000;
-app.listen(port, () => {
-  console.log(`Server listening on port ${port}`);
-});
-
-module.exports = app;
+const port = process.env.PORT || 3000;
+app.listen(port, () => logger.info(`Listening on port ${port}...`));
