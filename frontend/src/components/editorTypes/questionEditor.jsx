@@ -1,5 +1,5 @@
 import RatingQuestionEditor from "./ratingQuestionEditor";
-import surveyTypes from "../../surveyTypes";
+import { SurveyTypes, defaultValues, labels } from "../../surveyTypes";
 import Input from "../common/input";
 import OptionsEditor from "./optionsEditor";
 
@@ -8,7 +8,7 @@ export default function QuestionEditor({ question, handleChange, error }) {
 
   const editorTypeSwitch = (type) => {
     switch (type) {
-      case surveyTypes[4].type:
+      case SurveyTypes.Rating:
         return (
           <RatingQuestionEditor
             question={question}
@@ -16,9 +16,9 @@ export default function QuestionEditor({ question, handleChange, error }) {
             error={error}
           />
         );
-      case surveyTypes[1].type:
-      case surveyTypes[2].type:
-      case surveyTypes[3].type:
+      case SurveyTypes.MultipleChoice:
+      case SurveyTypes.MultipleAnswer:
+      case SurveyTypes.DropdownList:
         return (
           <OptionsEditor
             question={question}
@@ -32,9 +32,7 @@ export default function QuestionEditor({ question, handleChange, error }) {
   };
 
   const switchType = (e) => {
-    const defaultQuestion = surveyTypes.find(
-      (t) => t.type === e.target.value
-    ).default;
+    const defaultQuestion = defaultValues[e.target.value];
 
     // spread the default values and other question properties
     const update = {
@@ -81,13 +79,13 @@ export default function QuestionEditor({ question, handleChange, error }) {
           defaultValue={question.type}
           onChange={switchType}
         >
-          {surveyTypes.map((t) => (
+          {Object.values(SurveyTypes).map((t) => (
             <option
               className="w-full"
-              key={`${question._id} editor ${t.type}`}
-              value={t.type}
+              key={`${question._id} editor ${t}`}
+              value={t}
             >
-              {t.label}
+              {labels[t]}
             </option>
           ))}
         </select>

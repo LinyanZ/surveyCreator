@@ -7,7 +7,7 @@ const getAllSurveys = async (req, res) => {
 
 const getSurveyById = async (req, res) => {
   const result = await Survey.find({ _id: req.params.id });
-  return res.send(result);
+  return res.send(result[0]);
 };
 
 const addSurvey = async (req, res) => {

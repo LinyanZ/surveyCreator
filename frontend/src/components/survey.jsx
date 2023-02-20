@@ -1,11 +1,24 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Joi from "joi";
+import { useParams } from "react-router-dom";
+import { useQuery } from "react-query";
 
 import Question from "./questionTypes/question";
+import { getSurveyByID } from "../api/surveys";
 
-export default function Survey({ survey }) {
+export default function Survey() {
   const [submission, setSubmission] = useState([]);
   const [errors, setErrors] = useState({});
+  const { id } = useParams();
+  const {
+    isLoading,
+    isSuccess,
+    isError,
+    data: response,
+    error,
+  } = useQuery(`survey:${id}`, () => getSurveyByID(id));
+
+  const survey = response?.data;
 
   const handleChange = (question, value) => {
     const newSubmission = submission.filter((s) => s._id !== question._id);
@@ -52,28 +65,34 @@ export default function Survey({ survey }) {
   };
 
   return (
-    <div className="w-full max-w-screen-lg mx-auto my-8 px-8">
-      <h1 className="w-full py-2 text-4xl font-bold">{survey.title}</h1>
-      <h2 className="w-full py-2 text-2xl">{survey.description}</h2>
-      <div className="h-[1px] w-full bg-neutral-200 my-8" />
-      {survey.questions.map((q, index) => (
-        <Question
-          key={q._id}
-          className="w-full my-8"
-          question={q}
-          index={index + 1}
-          showIndex={survey.showIndex}
-          handleChange={handleChange}
-          error={errors[q._id]}
-        />
-      ))}
-      <button
-        className="w-full p-4 text-2xl text-white transition-colors border rounded-xl bg-emerald-500 hover:bg-emerald-400 disabled:bg-neutral-400"
-        type="submit"
-        onClick={handleSubmit}
-      >
-        Submit
-      </button>
-    </div>
+    <>
+      {isLoading && <div>Loading...</div>}
+      {isError && <div>{error}</div>}
+      {isSuccess && (
+        <div className="w-full max-w-screen-lg mx-auto my-8 px-8">
+          <h1 className="w-full py-2 text-4xl font-bold">{survey.title}</h1>
+          <h2 className="w-full py-2 text-2xl">{survey.description}</h2>
+          <div className="h-[1px] w-full bg-neutral-200 my-8" />
+          {survey.questions.map((q, index) => (
+            <Question
+              key={q._id}
+              className="w-full my-8"
+              question={q}
+              index={index + 1}
+              showIndex={survey.showIndex}
+              handleChange={handleChange}
+              error={errors[q._id]}
+            />
+          ))}
+          <button
+            className="w-full p-4 text-2xl text-white transition-colors border rounded-xl bg-emerald-500 hover:bg-emerald-400 disabled:bg-neutral-400"
+            type="submit"
+            onClick={handleSubmit}
+          >
+            Submit
+          </button>
+        </div>
+      )}
+    </>
   );
 }

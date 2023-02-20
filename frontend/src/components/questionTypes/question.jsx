@@ -5,7 +5,7 @@ import MultipleChoicesQuestion from "./multipleChoicesQuestion";
 import DropDownListQuestion from "./dropDownListQuestion";
 import RatingQuestion from "./ratingQuestion";
 
-import surveyTypes from "../../surveyTypes";
+import { SurveyTypes } from "../../surveyTypes";
 
 export default function Question({
   question,
@@ -30,19 +30,19 @@ export default function Question({
   const questionTypeSwitch = () => {
     let component;
     switch (question.type) {
-      case surveyTypes[0].type:
+      case SurveyTypes.ShortAnswer:
         component = <ShortAnswerQuestion />;
         break;
-      case surveyTypes[1].type:
+      case SurveyTypes.MultipleChoice:
         component = <SingleChoiceQuestion />;
         break;
-      case surveyTypes[2].type:
+      case SurveyTypes.MultipleAnswer:
         component = <MultipleChoicesQuestion />;
         break;
-      case surveyTypes[3].type:
+      case SurveyTypes.DropdownList:
         component = <DropDownListQuestion />;
         break;
-      case surveyTypes[4].type:
+      case SurveyTypes.Rating:
         component = <RatingQuestion />;
         break;
     }
