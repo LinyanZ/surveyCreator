@@ -1,9 +1,8 @@
 import { NavLink } from "react-router-dom";
-import { logout } from "../api/users";
 import { useAuth } from "../context/auth";
 
 export default function Navbar() {
-  const [user, setUser] = useAuth();
+  const { user, logout } = useAuth();
 
   return (
     <nav className="shadow-[0px_0px_10px_2px_rgba(0,0,0,0.05)]">
@@ -27,14 +26,7 @@ export default function Navbar() {
           </>
         ) : (
           <li className="ml-auto">
-            <button
-              onClick={() => {
-                setUser(null);
-                logout();
-              }}
-            >
-              Logout
-            </button>
+            <button onClick={() => logout()}>Logout</button>
           </li>
         )}
       </ul>

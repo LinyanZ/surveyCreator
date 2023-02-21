@@ -3,7 +3,6 @@ import { Link, Navigate } from "react-router-dom";
 import Joi from "joi";
 import Input from "../common/input";
 import { validate } from "./validate";
-import { register } from "../../api/users";
 import { useAuth } from "../../context/auth";
 
 export default function RegistrationForm() {
@@ -14,7 +13,7 @@ export default function RegistrationForm() {
   });
   const [errors, setErrors] = useState({});
 
-  const [user, setUser] = useAuth();
+  const { user, register } = useAuth();
   if (user) return <Navigate to="/" replace />;
 
   const schema = Joi.object({
@@ -37,18 +36,7 @@ export default function RegistrationForm() {
 
     setErrors(validate(account, schema));
     if (Object.keys(errors).length !== 0) return;
-
-    try {
-      const result = await register({
-        username: account.username,
-        password: account.password,
-      });
-      if (result.status === 200) {
-        setUser(result.data);
-      }
-    } catch (e) {
-      console.log(e);
-    }
+    register({ username: account.username, password: account.password });
   };
 
   const handleChange = ({ currentTarget: input }) => {

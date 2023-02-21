@@ -3,7 +3,6 @@ import { Link, Navigate } from "react-router-dom";
 import Joi from "joi";
 import Input from "../common/input";
 import { validate } from "./validate";
-import { login } from "../../api/users";
 import { useAuth } from "../../context/auth";
 
 export default function LoginForm() {
@@ -13,7 +12,7 @@ export default function LoginForm() {
   });
   const [errors, setErrors] = useState({});
 
-  const [user, setUser] = useAuth();
+  const { user, login } = useAuth();
   if (user) return <Navigate to="/" replace />;
 
   const schema = Joi.object({
@@ -26,15 +25,7 @@ export default function LoginForm() {
 
     setErrors(validate(account, schema));
     if (Object.keys(errors).length !== 0) return;
-
-    try {
-      const result = await login(account);
-      if (result.status === 200) {
-        setUser(result.data);
-      }
-    } catch (e) {
-      console.log(e);
-    }
+    login(account);
   };
 
   const handleChange = ({ currentTarget: input }) => {

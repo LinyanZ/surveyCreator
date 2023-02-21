@@ -5,13 +5,14 @@ const cors = require("cors");
 // otherwise, allow all connections (*)
 const whitelist = process.env.CORS_WHITELIST
   ? process.env.CORS_WHITELIST.split(" ")
-  : "*";
+  : "http://localhost:5001";
 
 module.exports = function (app) {
   app.use(
     cors({
       origin: whitelist,
       optionSuccessStatus: 200,
+      credentials: true,
     })
   );
 };

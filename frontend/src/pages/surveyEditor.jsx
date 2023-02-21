@@ -149,6 +149,7 @@ export default function SurveyEditor() {
   const [survey, setSurvey] = useState({
     title: "",
     description: "",
+    showIndex: false,
     questions: [],
   });
   const [selected, setSelected] = useState(null);
@@ -176,12 +177,18 @@ export default function SurveyEditor() {
     return newErrors;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const newErrors = validate(survey);
     setErrors(newErrors);
     if (Object.keys(newErrors).length === 0) {
+      try {
+        const result = await addSurvey(survey);
+        if (result.status === 200) console.log("success");
+      } catch (e) {
+        console.log(e);
+      }
     }
   };
 
