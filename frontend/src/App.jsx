@@ -6,6 +6,8 @@ import Survey from "./components/survey";
 import Home from "./pages/home";
 import SurveyEditor from "./pages/surveyEditor";
 import { QueryClientProvider, QueryClient } from "react-query";
+import { AuthProvider } from "./context/auth";
+import ProtectedRoute from "./components/protectedRoute";
 
 const queryClient = new QueryClient();
 
@@ -32,7 +34,11 @@ const router = createBrowserRouter([
       },
       {
         path: "create",
-        element: <SurveyEditor />,
+        element: (
+          <ProtectedRoute admin>
+            <SurveyEditor />
+          </ProtectedRoute>
+        ),
       },
     ],
   },
@@ -40,9 +46,11 @@ const router = createBrowserRouter([
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-    </QueryClientProvider>
+    <AuthProvider>
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+      </QueryClientProvider>
+    </AuthProvider>
   );
 }
 

@@ -9,6 +9,8 @@ import Input from "../components/common/input";
 import Joi from "joi";
 import { SurveyTypes } from "../surveyTypes";
 import DraggableList from "../components/draggableList/draggableList";
+import { addSurvey } from "../api/surveys";
+import { useQuery } from "react-query";
 
 const schema = Joi.object({
   title: Joi.string().required().messages({
@@ -179,7 +181,8 @@ export default function SurveyEditor() {
 
     const newErrors = validate(survey);
     setErrors(newErrors);
-    if (Object.keys(newErrors).length === 0) console.log(survey);
+    if (Object.keys(newErrors).length === 0) {
+    }
   };
 
   const updateQuestions = (_id, update) => {

@@ -16,7 +16,7 @@ export default function Survey() {
     isError,
     data: response,
     error,
-  } = useQuery(`survey:${id}`, () => getSurveyByID(id));
+  } = useQuery(["survey", id], () => getSurveyByID(id));
 
   const survey = response?.data;
 

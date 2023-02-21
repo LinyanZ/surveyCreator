@@ -8,4 +8,8 @@ const getSurveyByID = (id) => {
   return http.get(`surveys/${id}`);
 };
 
-export { getAllSurveys, getSurveyByID };
+const addSurvey = (survey) => {
+  return http.post("surveys", survey);
+};
+
+export { getAllSurveys, getSurveyByID, addSurvey };

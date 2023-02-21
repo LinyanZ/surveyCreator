@@ -1,8 +1,10 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import Joi from "joi";
 import Input from "../common/input";
 import { validate } from "./validate";
+import { login } from "../../api/users";
+import { useAuth } from "../../context/auth";
 
 export default function LoginForm() {
   const [account, setAccount] = useState({
@@ -11,18 +13,28 @@ export default function LoginForm() {
   });
   const [errors, setErrors] = useState({});
 
+  const [user, setUser] = useAuth();
+  if (user) return <Navigate to="/" replace />;
+
   const schema = Joi.object({
     username: Joi.string().required().label("Username"),
     password: Joi.string().required().label("Password"),
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     setErrors(validate(account, schema));
     if (Object.keys(errors).length !== 0) return;
 
-    console.log(account);
+    try {
+      const result = await login(account);
+      if (result.status === 200) {
+        setUser(result.data);
+      }
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const handleChange = ({ currentTarget: input }) => {
