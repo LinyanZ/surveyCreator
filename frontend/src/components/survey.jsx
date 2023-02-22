@@ -5,6 +5,8 @@ import { useQuery } from "react-query";
 
 import Question from "./questionTypes/question";
 import { getSurveyByID } from "../api/surveys";
+import { postSubmissionById } from "../api/submissions";
+import { toast } from "react-toastify";
 
 export default function Survey() {
   const [submission, setSubmission] = useState([]);
@@ -21,9 +23,9 @@ export default function Survey() {
   const survey = response?.data;
 
   const handleChange = (question, value) => {
-    const newSubmission = submission.filter((s) => s._id !== question._id);
+    const newSubmission = submission.filter((s) => s.qid !== question._id);
     newSubmission.push({
-      _id: question._id,
+      qid: question._id,
       answer: value,
     });
     validate(newSubmission, question._id);
@@ -42,7 +44,7 @@ export default function Survey() {
 
     for (const question of survey.questions) {
       if (question.isRequired && (!_id || _id === question._id)) {
-        const answer = s.find((q) => q._id === question._id)?.answer;
+        const answer = s.find((s) => s.qid === question._id)?.answer;
         const { error } = answerSchema.validate(answer);
 
         if (!answer || error) {
@@ -57,11 +59,22 @@ export default function Survey() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validate(submission)) {
-      console.log(submission);
-    }
+    if (!validate(submission)) return;
+
+    if (submission.length === 0)
+      return toast.error("Submission can not be empty.");
+
+    toast.promise(postSubmissionById(survey._id, submission), {
+      pending: "Submitting...",
+      success: "Submitted!",
+      error: {
+        render({ data }) {
+          console.log(data.message);
+        },
+      },
+    });
   };
 
   return (

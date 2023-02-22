@@ -11,6 +11,7 @@ import { SurveyTypes } from "../surveyTypes";
 import DraggableList from "../components/draggableList/draggableList";
 import { addSurvey } from "../api/surveys";
 import { useQuery } from "react-query";
+import { useNavigate } from "react-router-dom";
 
 const schema = Joi.object({
   title: Joi.string().required().messages({
@@ -154,6 +155,7 @@ export default function SurveyEditor() {
   });
   const [selected, setSelected] = useState(null);
   const [errors, setErrors] = useState({});
+  const navigate = useNavigate();
 
   const validate = (newSurvey) => {
     const newErrors = {};
@@ -185,7 +187,10 @@ export default function SurveyEditor() {
     if (Object.keys(newErrors).length === 0) {
       try {
         const result = await addSurvey(survey);
-        if (result.status === 200) console.log("success");
+        if (result.status === 200) {
+          const sid = result.data._id;
+          navigate(`/surveys/${sid}`);
+        }
       } catch (e) {
         console.log(e);
       }
