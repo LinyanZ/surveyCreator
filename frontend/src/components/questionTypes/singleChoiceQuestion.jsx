@@ -11,14 +11,14 @@ export default function SingleChoiceQuestion({ question, handleChange }) {
           <input
             className="mr-2"
             type="radio"
-            id={`${_id} ${option}`}
+            id={`${_id} ${i} ${option}`}
             name={_id}
-            value={`${_id} ${option}`}
+            value={option}
             onChange={(e) => {
               handleChange && handleChange(question, e.target.value);
             }}
           />
-          <label htmlFor={`${_id} ${option}`}>{option}</label>
+          <label htmlFor={`${_id} ${i} ${option}`}>{option}</label>
         </div>
       ))}
     </>

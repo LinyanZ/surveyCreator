@@ -17,9 +17,20 @@ const getSurveyById = async (req, res) => {
 
 const getSurveySubmissionsById = async (req, res) => {
   const submissions = await SurveySubmissions.findOne({ _id: req.params.id });
-  if (!submissions) return res.status(400).send("Survey does not exist.");
+  const survey = await Survey.findOne({ _id: req.params.id });
+  if (!submissions || !survey)
+    return res.status(400).send("Survey does not exist.");
 
-  return res.send(submissions);
+  const responses = [];
+  for (const question of survey.questions) {
+    const sub = submissions.questions.find((q) => q.qid === question._id);
+    responses.push({
+      ...question._doc,
+      responses: sub.responses,
+    });
+  }
+
+  return res.send(responses);
 };
 
 const postSurveySubmissionsById = async (req, res) => {

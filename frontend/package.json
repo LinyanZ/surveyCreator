@@ -19,6 +19,7 @@
     "react-router-dom": "^6.8.1",
     "react-toastify": "^9.1.1",
     "react-use-measure": "^2.1.1",
+    "recharts": "^2.4.3",
     "uuid": "^9.0.0"
   },
   "devDependencies": {

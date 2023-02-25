@@ -12,6 +12,7 @@ import DraggableList from "../components/draggableList/draggableList";
 import { addSurvey } from "../api/surveys";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const schema = Joi.object({
   title: Joi.string().required().messages({
@@ -185,15 +186,21 @@ export default function SurveyEditor() {
     const newErrors = validate(survey);
     setErrors(newErrors);
     if (Object.keys(newErrors).length === 0) {
-      try {
-        const result = await addSurvey(survey);
-        if (result.status === 200) {
-          const sid = result.data._id;
-          navigate(`/surveys/${sid}`);
-        }
-      } catch (e) {
-        console.log(e);
-      }
+      toast.promise(addSurvey(survey), {
+        pending: "Uploading...",
+        success: {
+          render({ data }) {
+            const sid = data.data._id;
+            navigate(`/surveys/${sid}`);
+            return "Survey Created!";
+          },
+        },
+        error: {
+          render({ data }) {
+            return data.response.data;
+          },
+        },
+      });
     }
   };
 

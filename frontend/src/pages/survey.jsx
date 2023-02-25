@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import Joi from "joi";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 
-import Question from "./questionTypes/question";
+import Question from "../components/questionTypes/question";
 import { getSurveyByID } from "../api/surveys";
 import { postSubmissionById } from "../api/submissions";
 import { toast } from "react-toastify";
+import { useAuth } from "../context/auth";
 
 export default function Survey() {
   const [submission, setSubmission] = useState([]);
@@ -19,6 +20,7 @@ export default function Survey() {
     data: response,
     error,
   } = useQuery(["survey", id], () => getSurveyByID(id));
+  const { user } = useAuth();
 
   const survey = response?.data;
 
@@ -71,7 +73,7 @@ export default function Survey() {
       success: "Submitted!",
       error: {
         render({ data }) {
-          console.log(data.message);
+          return data.response.data;
         },
       },
     });
@@ -85,6 +87,11 @@ export default function Survey() {
         <div className="w-full max-w-screen-lg mx-auto my-8 px-8">
           <h1 className="w-full py-2 text-4xl font-bold">{survey.title}</h1>
           <h2 className="w-full py-2 text-2xl">{survey.description}</h2>
+          {user?.isAdmin && (
+            <Link className="py-2 font-bold" to="submissions">
+              View Submissions
+            </Link>
+          )}
           <div className="h-[1px] w-full bg-neutral-200 my-8" />
           {survey.questions.map((q, index) => (
             <Question

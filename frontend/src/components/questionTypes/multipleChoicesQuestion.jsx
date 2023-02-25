@@ -16,9 +16,9 @@ export default function MultipleChoicesQuestion({ question, handleChange }) {
           <input
             className="mr-2"
             type="checkbox"
-            id={`${_id} ${option}`}
+            id={`${_id} ${index} ${option}`}
             name={_id}
-            value={`${_id} ${option}`}
+            value={option}
             onChange={(e) => {
               if (handleChange) {
                 const newCheckedOption = [...checkedOptions];
@@ -32,7 +32,7 @@ export default function MultipleChoicesQuestion({ question, handleChange }) {
               }
             }}
           />
-          <label htmlFor={`${_id} ${option}`}>{option}</label>
+          <label htmlFor={`${_id} ${index} ${option}`}>{option}</label>
         </div>
       ))}
     </>
