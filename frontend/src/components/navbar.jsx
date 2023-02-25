@@ -5,7 +5,7 @@ export default function Navbar() {
   const { user, logout } = useAuth();
 
   return (
-    <nav className="shadow-[0px_0px_10px_2px_rgba(0,0,0,0.05)]">
+    <nav className="shadow-[0px_0px_10px_2px_rgba(0,0,0,0.05)] h-[92px]">
       <ul className="flex flex-wrap items-center w-full h-full max-w-5xl gap-16 p-8 mx-auto text-xl">
         <li>
           <NavLink to="">Home</NavLink>

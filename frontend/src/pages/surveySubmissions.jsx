@@ -18,6 +18,8 @@ import {
 } from "recharts";
 import { SurveyTypes } from "../surveyTypes";
 import { useState } from "react";
+import ErrorScreen from "../components/errorScreen";
+import LoadingScreen from "../components/loadingScreen";
 
 const Submission = ({ record }) => {
   const [chartType, setChartType] = useState("barChart");
@@ -116,8 +118,8 @@ export default function SurveySubmissions() {
 
   const submissions = data?.data;
 
-  if (isError) return <div>{error.message}</div>;
-  if (isLoading) return <div>Loading...</div>;
+  if (isError) return <ErrorScreen message={error.message} />;
+  if (isLoading) return <LoadingScreen />;
 
   return (
     <div className="w-full max-w-screen-lg mx-auto my-8 px-8">
