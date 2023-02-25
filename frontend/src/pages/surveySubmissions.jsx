@@ -62,9 +62,16 @@ const Submission = ({ record }) => {
         </button>
       )}
       <div className="w-full h-[500px] my-8">
+        {record.responses === undefined && (
+          <div className="w-full h-full flex items-center justify-center">
+            <p className="text-neutral-500 text-xl sm:text-2xl">
+              No Responses Yet
+            </p>
+          </div>
+        )}
         {record.type === SurveyTypes.ShortAnswer ? (
           <ul className="h-full overflow-auto text-lg sm:text-xl">
-            {record.responses.map((r, i) => (
+            {record.responses?.map((r, i) => (
               <li key={`${record.qid} ${i}`}>{r}</li>
             ))}
           </ul>
