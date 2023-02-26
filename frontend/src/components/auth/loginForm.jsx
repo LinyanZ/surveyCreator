@@ -60,7 +60,7 @@ export default function LoginForm() {
           inputStyle="block text-xl w-full my-4 border rounded-xl p-4 focus:outline-neutral-200"
           errorStyle="text-red mt-2 text-red-500 mx-4"
         />
-        <p className="text-xl text-right">Forgot password?</p>
+        {/* <p className="text-xl text-right">Forgot password?</p> */}
         <button
           className="block w-full p-4 my-8 text-2xl text-white transition-colors border rounded-xl bg-emerald-500 hover:bg-emerald-400 disabled:bg-neutral-400"
           type="submit"

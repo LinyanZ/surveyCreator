@@ -234,7 +234,7 @@ export default function SurveyEditor() {
   };
 
   return (
-    <div className="w-full max-w-screen-lg mx-auto my-8">
+    <div className="w-full max-w-screen-lg mx-auto mt-[60px] sm:mt-[92px] py-8">
       <form>
         <div className="px-8">
           <Input
@@ -324,7 +324,7 @@ export default function SurveyEditor() {
           )}
         ></DraggableList>
         {survey.questions.length === 0 && (
-          <p className="text-3xl font-bold text-neutral-500 my-16 mx-auto w-fit">
+          <p className="text-xl sm:text-3xl font-bold text-neutral-500 my-16 px-8 mx-auto w-fit text-center">
             Add your first question here.
           </p>
         )}

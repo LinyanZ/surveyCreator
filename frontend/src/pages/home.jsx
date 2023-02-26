@@ -19,7 +19,7 @@ export default function Home() {
   if (isError) return <ErrorScreen message={error.message} />;
 
   return (
-    <div className="max-w-screen-lg p-8 mx-auto">
+    <div className="max-w-screen-lg p-8 mx-auto mt-[60px] sm:mt-[92px]">
       {response.data.map((s) => (
         <Link
           key={s._id}

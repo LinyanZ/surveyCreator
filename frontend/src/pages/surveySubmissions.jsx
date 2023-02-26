@@ -122,7 +122,7 @@ export default function SurveySubmissions() {
   if (isLoading) return <LoadingScreen />;
 
   return (
-    <div className="w-full max-w-screen-lg mx-auto my-8 px-8">
+    <div className="w-full max-w-screen-lg mx-auto p-8 mt-[60px] sm:mt-[92px]">
       {submissions?.map((record, i) => (
         <Submission record={record} key={i} />
       ))}
